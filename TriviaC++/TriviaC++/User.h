@@ -1,7 +1,7 @@
 #pragma once
 #include "Helper.h"
-
-using std::string;
+#include "Room.h"
+#include "Game.h"
 
 class User
 {
@@ -14,7 +14,7 @@ public:
 private:
 	string _username;
 	SOCKET _sock;
-	//Game _currGame;
-	//Room _currRoom;
+	Game* _currGame;
+	Room* _currRoom;
 };
 

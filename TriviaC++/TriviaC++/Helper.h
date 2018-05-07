@@ -3,8 +3,14 @@
 #include <vector>
 #include <string>
 #include <WinSock2.h>
+#include <map>
+
 
 #pragma comment (lib, "Ws2_32.lib")
+
+using std::string;
+using std::map;
+using std::vector;
 
 class Helper
 {
