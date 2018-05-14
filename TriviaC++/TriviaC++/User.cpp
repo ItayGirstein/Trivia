@@ -20,7 +20,7 @@ void User::send(string)
 
 }
 
-string User::gestUsername()
+string User::getUsername()
 {
 	return _username;
 }
@@ -45,9 +45,13 @@ void User::setGame(Game* currGame)
 	_currGame = currGame;
 }
 
+void User::clearRoom()
+{
+}
+
 bool User::createRoom(int, string, int, int, int)
 {
-	_currRoom = new Room();
+	//_currRoom = new Room();
 	return false;
 }
 
@@ -59,4 +63,14 @@ bool User::joinRoom(Room *)
 void User::leaveRoom()
 {
 	_currGame = nullptr; // todo
+}
+
+int User::closeRoom()
+{
+	return 0;
+}
+
+bool User::leaveGame()
+{
+	return false;
 }

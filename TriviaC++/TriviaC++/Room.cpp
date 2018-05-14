@@ -4,9 +4,28 @@ Room::Room(int id, User * a, string n, int max, int time, int q) : _id(id), _adm
 {
 }
 
+bool Room::joinRoom(User *)
+{
+	return false;
+}
+
+void Room::leaveRoom(User *)
+{
+}
+
+int Room::closeRoom(User *)
+{
+	return 0;
+}
+
 vector<User*> Room::getUsers()
 {
 	return _users;
+}
+
+string Room::getUsersListMessage()
+{
+	return string();
 }
 
 int Room::getQuestionsNo()
@@ -24,12 +43,20 @@ string Room::getName()
 	return _name;
 }
 
-string Room::getUsersAsString(vector<User*> users, User* user)
+string Room::getUsersAsString(vector<User*> users, User * user)
 {
-	string toReturn = user->getUsername();
+	string toReturn = user.getUsername();
 	for (int i = 0; i < users.size(); i++)
 	{
-		toReturn += "," + users[i]->getUsername();
+		toReturn += "," + users[i].getUsername();
 	}
 	return toReturn;
+}
+
+void Room::sendMessage(string)
+{
+}
+
+void Room::sendMessage(User *, string)
+{
 }

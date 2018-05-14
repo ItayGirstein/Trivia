@@ -11,7 +11,7 @@ public:
 
 
 	void send(string);
-	string gestUsername();
+	string getUsername();
 	SOCKET getSocket();
 	Room* getRoom();
 	Game* getGame();
