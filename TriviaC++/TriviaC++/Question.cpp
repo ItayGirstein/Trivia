@@ -1,9 +1,7 @@
 #include "Question.h"
 
-Question::Question(int cA, string q, string a, string b, string c, string d)
+Question::Question(int cA, string q, string a, string b, string c, string d) : _correctAnswerIndex(cA), _question(q)
 {
-	_correctAnswerIndex = cA;
-	_question = q;
 	_answers[0] = a;
 	_answers[1] = b;
 	_answers[2] = c;
