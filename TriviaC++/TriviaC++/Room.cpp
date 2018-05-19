@@ -43,9 +43,9 @@ string Room::getName()
 	return _name;
 }
 
-string Room::getUsersAsString(vector<User*> users, User * user)
+string Room::getUsersAsString(vector<User*> users, User* user)
 {
-	string toReturn = user.getUsername();
+	string toReturn = user.
 	for (int i = 0; i < users.size(); i++)
 	{
 		toReturn += "," + users[i].getUsername();

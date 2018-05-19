@@ -1,7 +1,9 @@
 #pragma once
 #include "Helper.h"
-#include "Room.h"
 #include "Game.h"
+
+class Room;
+class Game;
 
 class User
 {
