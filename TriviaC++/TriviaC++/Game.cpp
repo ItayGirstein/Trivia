@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game(const vector<User*>& names, int flag, DataBase &db)
+Game::Game(const vector<User*>& names, int flag, DataBase &db) : _players(names), _db(db)
 {
 }
 
