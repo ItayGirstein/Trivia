@@ -1,6 +1,7 @@
 #pragma once
 #include "Helper.h"
 #include "User.h"
+#include "sqlite3.h"
 
 
 class DataBase

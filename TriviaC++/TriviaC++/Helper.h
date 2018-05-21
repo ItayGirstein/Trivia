@@ -4,6 +4,7 @@
 #include <string>
 #include <WinSock2.h>
 #include <map>
+#include <algorithm>
 
 
 #pragma comment (lib, "Ws2_32.lib")
