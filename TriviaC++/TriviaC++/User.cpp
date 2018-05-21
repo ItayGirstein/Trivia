@@ -1,17 +1,13 @@
 #include "User.h"
+#include "Room.h"
 
-
-User::User(string, SOCKET)
+User::User(string username, SOCKET sock) : _currGame(nullptr), _currRoom(nullptr), _username(username), _sock(sock)
 {
 }
 
-User::~User()
+void User::send(string msg)
 {
-}
-
-void User::send(string)
-{
-
+	Helper::sendData(_sock, msg);
 }
 
 string User::getUsername()
@@ -36,27 +32,27 @@ Game * User::getGame()
 
 void User::setGame(Game* currGame)
 {
+	_currRoom = nullptr;
 	_currGame = currGame;
 }
 
 void User::clearRoom()
 {
+	_currGame = nullptr;
 }
 
-bool User::createRoom(int, string, int, int, int)
+bool User::createRoom(int roomId, string roomName, int maxUsers, int questionsNo, int questionTime)
 {
-	//_currRoom = new Room();
 	return false;
 }
 
-bool User::joinRoom(Room *)
+bool User::joinRoom(Room* newRoom)
 {
-	return false; // todo
+	return false;
 }
 
 void User::leaveRoom()
 {
-	_currGame = nullptr; // todo
 }
 
 int User::closeRoom()
