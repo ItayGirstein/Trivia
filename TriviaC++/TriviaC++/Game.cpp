@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game(const vector<User*>&, int, DataBase &)
+Game::Game(const vector<User*>& names, int flag, DataBase &db)
 {
 }
 
@@ -29,7 +29,7 @@ bool Game::leaveGame(User *)
 
 int Game::getId()
 {
-	return _id;
+	return 0;
 }
 
 bool Game::insertGameToDB()
