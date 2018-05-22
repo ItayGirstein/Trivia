@@ -4,6 +4,8 @@
 
 DataBase::DataBase()
 {
+	int rc = sqlite3_open("carsDealer.db", &_db);
+	rcCheck(rc, _db);
 }
 
 
@@ -74,4 +76,19 @@ int DataBase::callbackBestScore(void *, int, char **, char **)
 int DataBase::callbackPersonalStatus(void *, int, char **, char **)
 {
 	return 0;
+}
+
+/*
+check if rc is valid
+input: rc and the database
+output: none
+*/
+void rcCheck(int rc, sqlite3* db)
+{
+	if (rc)
+	{
+		std::cout << sqlite3_errmsg(db) << endl;
+		sqlite3_close(db);
+		system("pause");
+	}
 }

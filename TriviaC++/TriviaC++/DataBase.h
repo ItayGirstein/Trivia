@@ -2,6 +2,7 @@
 #include "Helper.h"
 #include "User.h"
 #include "sqlite3.h"
+#include <unordered_map>
 
 
 class DataBase
@@ -26,5 +27,7 @@ private:
 	static int callbackQuestions(void*, int, char**, char**);
 	static int callbackBestScore(void*, int, char**, char**);
 	static int callbackPersonalStatus(void*, int, char**, char**);
+	sqlite3* _db;
+	unordered_map<string, vector<string>> _results;
 };
 
