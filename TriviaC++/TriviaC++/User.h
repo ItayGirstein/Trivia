@@ -9,9 +9,7 @@ class User
 {
 public:
 	User(string, SOCKET);
-	~User();
-
-
+	~User() = default;
 	void send(string);
 	string getUsername();
 	SOCKET getSocket();

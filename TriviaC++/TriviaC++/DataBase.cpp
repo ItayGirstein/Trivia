@@ -15,7 +15,7 @@ DataBase::~DataBase()
 
 bool DataBase::isUserExists(string username)
 {
-	
+	return false;
 }
 
 bool DataBase::addNewUser(string, string, string)

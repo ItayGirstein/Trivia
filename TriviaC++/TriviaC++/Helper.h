@@ -5,7 +5,8 @@
 #include <WinSock2.h>
 #include <map>
 #include <algorithm>
-
+#include <exception>
+#include <iostream>
 
 #pragma comment (lib, "Ws2_32.lib")
 
