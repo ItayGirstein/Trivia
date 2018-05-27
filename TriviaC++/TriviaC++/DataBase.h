@@ -23,6 +23,7 @@ public:
 
 
 private:
+	void rcCheck(int rc, sqlite3* db);
 	static int callbackCount(void* notUsed, int argc, char** argv, char** azCol);
 	static int callbackQuestions(void* notUsed, int argc, char** argv, char** azCol);
 	static int callbackBestScore(void* notUsed, int argc, char** argv, char** azCol);

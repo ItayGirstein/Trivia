@@ -84,12 +84,11 @@ check if rc is valid
 input: rc and the database
 output: none
 */
-void rcCheck(int rc, sqlite3* db)
+void DataBase::rcCheck(int rc, sqlite3* db)
 {
 	if (rc)
 	{
 		std::cout << sqlite3_errmsg(db) << std::endl;
 		sqlite3_close(db);
-		system("pause");
 	}
 }

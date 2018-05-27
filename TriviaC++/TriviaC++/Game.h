@@ -10,7 +10,7 @@ class Game
 {
 public:
 	Game(const vector<User*>& , int, DataBase&);
-	~Game() = default;
+	~Game();
 	void sendFirstQuestion();
 	void handleFinishGame();
 	bool handleNextTurn();
@@ -30,6 +30,6 @@ private:
 	int _cuurQuestionIndex;
 	DataBase& _db;
 	map<string, int> _results;
-
+	int _currentTurnAnswers;
 };
 
