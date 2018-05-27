@@ -4,13 +4,14 @@
 
 DataBase::DataBase()
 {
-	int rc = sqlite3_open("carsDealer.db", &_db);
+	int rc = sqlite3_open("trivia.db", &_db);
 	rcCheck(rc, _db);
 }
 
 
 DataBase::~DataBase()
 {
+	sqlite3_close(_db);
 }
 
 bool DataBase::isUserExists(string username)
@@ -87,7 +88,7 @@ void rcCheck(int rc, sqlite3* db)
 {
 	if (rc)
 	{
-		std::cout << sqlite3_errmsg(db) << endl;
+		std::cout << sqlite3_errmsg(db) << std::endl;
 		sqlite3_close(db);
 		system("pause");
 	}

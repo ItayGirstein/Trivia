@@ -23,11 +23,11 @@ public:
 
 
 private:
-	static int callbackCount(void*, int, char**, char**);
-	static int callbackQuestions(void*, int, char**, char**);
-	static int callbackBestScore(void*, int, char**, char**);
-	static int callbackPersonalStatus(void*, int, char**, char**);
+	static int callbackCount(void* notUsed, int argc, char** argv, char** azCol);
+	static int callbackQuestions(void* notUsed, int argc, char** argv, char** azCol);
+	static int callbackBestScore(void* notUsed, int argc, char** argv, char** azCol);
+	static int callbackPersonalStatus(void* notUsed, int argc, char** argv, char** azCol);
 	sqlite3* _db;
-	unordered_map<string, vector<string>> _results;
+	std::unordered_map<string, vector<string>> _results;
 };
 
