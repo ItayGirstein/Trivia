@@ -4,8 +4,8 @@
 
 DataBase::DataBase()
 {
-	int rc = sqlite3_open("trivia.db", &_db);
-	rcCheck(rc, _db);
+	_rc = sqlite3_open("trivia.db", &_db);
+	rcCheck(_rc, _db);
 }
 
 
@@ -16,22 +16,61 @@ DataBase::~DataBase()
 
 bool DataBase::isUserExists(string username)
 {
-	return false;
+	char *zErrMsg = 0;
+
+	string command = "select email from t_users where username = " + username + ";"; // the email used for testing.
+	_rc = sqlite3_exec(_db, command.c_str(), this->callbackGeneral, nullptr, &zErrMsg);
+	rcCheck(_rc, _db);
+
+	auto it = _results.begin();
+
+	if (_results.size() != 0)
+	{
+		if (it->second[0] == "")
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
-bool DataBase::addNewUser(string, string, string)
+bool DataBase::addNewUser(string username, string password, string email)
 {
-	return false;
+	char *zErrMsg = 0;
+
+	string command = "insert into t_users(username, password, email) values(" + username + ", " + password + ", " + email + ");";
+	_rc = sqlite3_exec(_db, command.c_str(), this->callbackGeneral, nullptr, &zErrMsg);
+	rcCheck(_rc, _db);
 }
 
 bool DataBase::isUserAndPassMatch(string user, string pass)
 {
+	string command = "select password from t_users where username = " + user + ";";
+	char *zErrMsg = 0;
+
+	auto it = _results.begin();
+
+	if (_results.size() != 0)
+	{
+		if (it->second[0] == pass)
+		{
+			return true;
+		}
+	}
 	return false;
+
 }
 
-vector<Question*> DataBase::initQuestions(int num)
+vector<Question*> DataBase::initQuestions(int questionsNo)
 {
-	return vector<Question*>();
+	vector<Question*> toReturn;
+	while (questionsNo != 0)
+	{
+		
+
+		questionsNo--;
+	}
 }
 
 vector<string> DataBase::getBestScores()
@@ -59,22 +98,30 @@ bool DataBase::addAnswerToPlayer(int, string, int, string, bool, int)
 	return false;
 }
 
-int DataBase::callbackCount(void *, int, char **, char **)
+int DataBase::callbackGeneral(void* notUsed, int argc, char** argv, char** azCol)
 {
+	int i;
+
+	for (i = 0; i < argc; i++)
+	{
+		auto it = _results.find(azCol[i]);
+		if (it != _results.end())
+		{
+			it->second.push_back(argv[i]);
+		}
+		else
+		{
+			std::pair<string, vector<string>> p;
+			p.first = azCol[i];
+			p.second.push_back(argv[i]);
+			_results.insert(p);
+		}
+	}
+
 	return 0;
 }
 
-int DataBase::callbackQuestions(void *, int, char **, char **)
-{
-	return 0;
-}
-
-int DataBase::callbackBestScore(void *, int, char **, char **)
-{
-	return 0;
-}
-
-int DataBase::callbackPersonalStatus(void *, int, char **, char **)
+int DataBase::callbackQuestions(void * notUsed, int argc, char ** argv, char ** azCol)
 {
 	return 0;
 }
@@ -90,6 +137,5 @@ void rcCheck(int rc, sqlite3* db)
 	{
 		std::cout << sqlite3_errmsg(db) << std::endl;
 		sqlite3_close(db);
-		system("pause");
 	}
 }
