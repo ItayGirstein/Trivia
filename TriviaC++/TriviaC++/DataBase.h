@@ -2,7 +2,6 @@
 #include "Helper.h"
 #include "User.h"
 #include "sqlite3.h"
-#include <unordered_map>
 
 class DataBase
 {
@@ -22,12 +21,11 @@ public:
 
 
 private:
-	int callbackGeneral(void* notUsed, int argc, char** argv, char** azCol);
+	static int callbackGeneral(void * notUsed, int argc, char ** argv, char ** azCol);
 	static int callbackQuestions(void* notUsed, int argc, char** argv, char** azCol);
 	//static int callbackBestScore(void* notUsed, int argc, char** argv, char** azCol);
 	//static int callbackPersonalStatus(void* notUsed, int argc, char** argv, char** azCol);
 	sqlite3* _db;
 	int _rc;
-	std::unordered_map<string, vector<string>> _results;
 };
 

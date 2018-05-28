@@ -1,5 +1,8 @@
 #include "DataBase.h"
 
+bool rcCheck(int rc, sqlite3* db);
+
+std::unordered_map<string, vector<string>> _results;
 
 
 DataBase::DataBase()
@@ -19,7 +22,7 @@ bool DataBase::isUserExists(string username)
 	char *zErrMsg = 0;
 
 	string command = "select email from t_users where username = " + username + ";"; // the email used for testing.
-	_rc = sqlite3_exec(_db, command.c_str(), this->callbackGeneral, nullptr, &zErrMsg);
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 	rcCheck(_rc, _db);
 
 	auto it = _results.begin();
@@ -41,7 +44,7 @@ bool DataBase::addNewUser(string username, string password, string email)
 
 	string command = "insert into t_users(username, password, email) values(" + username + ", " + password + ", " + email + ");";
 	_rc = sqlite3_exec(_db, command.c_str(), this->callbackGeneral, nullptr, &zErrMsg);
-	rcCheck(_rc, _db);
+	return rcCheck(_rc, _db);
 }
 
 bool DataBase::isUserAndPassMatch(string user, string pass)
@@ -67,10 +70,9 @@ vector<Question*> DataBase::initQuestions(int questionsNo)
 	vector<Question*> toReturn;
 	while (questionsNo != 0)
 	{
-		
-
 		questionsNo--;
 	}
+	return toReturn;
 }
 
 vector<string> DataBase::getBestScores()
@@ -98,7 +100,7 @@ bool DataBase::addAnswerToPlayer(int, string, int, string, bool, int)
 	return false;
 }
 
-int DataBase::callbackGeneral(void* notUsed, int argc, char** argv, char** azCol)
+int DataBase::callbackGeneral(void * notUsed, int argc, char ** argv, char ** azCol)
 {
 	int i;
 
@@ -131,11 +133,13 @@ check if rc is valid
 input: rc and the database
 output: none
 */
-void DataBase::rcCheck(int rc, sqlite3* db)
+bool rcCheck(int rc, sqlite3* db)
 {
 	if (rc)
 	{
 		std::cout << sqlite3_errmsg(db) << std::endl;
 		sqlite3_close(db);
+		return true;
 	}
+	return false;
 }
