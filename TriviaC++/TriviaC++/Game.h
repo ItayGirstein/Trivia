@@ -23,11 +23,11 @@ private:
 	void initQuestionsFromDB();
 	void sendQuestionToAllUsers();
 
-
+	int _id;
 	vector<Question*> _questions;
 	vector<User*> _players;
 	int _questions_no;
-	int _cuurQuestionIndex;
+	int _currQuestionIndex;
 	DataBase& _db;
 	map<string, int> _results;
 	int _currentTurnAnswers;

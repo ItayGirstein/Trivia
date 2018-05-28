@@ -55,12 +55,42 @@ void Game::handleFinishGame()
 
 bool Game::handleNextTurn()
 {
-	return false;
+	bool toReturn = true;
+	if (!_players.size())
+	{
+		handleFinishGame();
+		toReturn = false;
+	}
+	for (int i = 0; i < _players.size(); i++)
+	{
+		if (_players.size() == _currentTurnAnswers)
+		{
+			if (_currQuestionIndex == _questions_no)
+			{
+				handleFinishGame();
+				toReturn = false;
+			}
+			else
+			{
+				_currQuestionIndex++;
+				sendQuestionToAllUsers();
+			}
+		}
+	}
+	return toReturn;
 }
 
-bool Game::handleAnswerFromUser(User *, int, int)
+bool Game::handleAnswerFromUser(User* user, int answerNo, int time)
 {
-	return false;
+	_currentTurnAnswers++;
+	if (_questions[_currQuestionIndex]->getCorrectAnswerIndex() == answerNo)
+	{
+		_results[user->getUsername()]++;
+	}
+	if (answerNo == 5)
+	{
+		_db.addAnswerToPlayer(_id,user->getUsername(), _questions[_currQuestionIndex]->getId(),"",)
+	}
 }
 
 bool Game::leaveGame(User *)
@@ -70,7 +100,7 @@ bool Game::leaveGame(User *)
 
 int Game::getId()
 {
-	return 0;
+	return _id;
 }
 
 bool Game::insertGameToDB()
@@ -102,4 +132,5 @@ void Game::sendQuestionToAllUsers()
 			std::cout << e.what() << std::endl;
 		}
 	}
+	_questions.erase(_questions.begin());
 }
