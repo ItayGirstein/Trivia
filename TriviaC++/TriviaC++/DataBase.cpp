@@ -131,7 +131,7 @@ check if rc is valid
 input: rc and the database
 output: none
 */
-void DataBase::rcCheck(int rc, sqlite3* db)
+void rcCheck(int rc, sqlite3* db)
 {
 	if (rc)
 	{
