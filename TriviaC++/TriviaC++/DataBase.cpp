@@ -1,6 +1,6 @@
 #include "DataBase.h"
 
-
+std::unordered_map<string, vector<string>> _results;
 
 DataBase::DataBase()
 {
@@ -19,7 +19,7 @@ bool DataBase::isUserExists(string username)
 	char *zErrMsg = 0;
 
 	string command = "select email from t_users where username = " + username + ";"; // the email used for testing.
-	_rc = sqlite3_exec(_db, command.c_str(), this->callbackGeneral, nullptr, &zErrMsg);
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 	rcCheck(_rc, _db);
 
 	auto it = _results.begin();
@@ -40,7 +40,7 @@ bool DataBase::addNewUser(string username, string password, string email)
 	char *zErrMsg = 0;
 
 	string command = "insert into t_users(username, password, email) values(" + username + ", " + password + ", " + email + ");";
-	_rc = sqlite3_exec(_db, command.c_str(), this->callbackGeneral, nullptr, &zErrMsg);
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 	return rcCheck(_rc, _db);
 }
 
