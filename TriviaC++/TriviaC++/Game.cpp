@@ -6,7 +6,7 @@ Game::Game(const vector<User*>& players, int flag, DataBase &db) : _players(play
 {
 	try
 	{
-	_db.insertNewGame();
+		_db.insertNewGame();
 	}
 	catch (std::exception& e)
 	{
@@ -82,15 +82,22 @@ bool Game::handleNextTurn()
 
 bool Game::handleAnswerFromUser(User* user, int answerNo, int time)
 {
+	bool isCorrect = false;
 	_currentTurnAnswers++;
-	if (_questions[_currQuestionIndex]->getCorrectAnswerIndex() == answerNo)
+	if (_questions[_currQuestionIndex]->getCorrectAnswerIndex() == answerNo)	//user is right
 	{
 		_results[user->getUsername()]++;
+		isCorrect = true;
 	}
-	if (answerNo == 5)
+	if (answerNo == 5)	//user didnt answer (bcz of time)
 	{
-		_db.addAnswerToPlayer(_id,user->getUsername(), _questions[_currQuestionIndex]->getId(),"",)
+		_db.addAnswerToPlayer(_id, user->getUsername(), _questions[_currQuestionIndex]->getId(), "", isCorrect, time);
 	}
+	else
+	{
+		_db.addAnswerToPlayer(_id, user->getUsername(), _questions[_currQuestionIndex]->getId(), _questions[_currQuestionIndex]->getAnswers()[answerNo], isCorrect, time);
+	}
+	return handleNextTurn();
 }
 
 bool Game::leaveGame(User *)
@@ -114,12 +121,12 @@ void Game::initQuestionsFromDB()
 
 void Game::sendQuestionToAllUsers()
 {
-	string msg("118###"+_questions[0]->getQuestion());
+	string msg("118###" + _questions[0]->getQuestion());
 	_currentTurnAnswers = 0;
 	string* ans = _questions[0]->getAnswers();
 	for (int i = 0; i < 4; i++)
 	{
-		msg += "###"+ans[i];
+		msg += "###" + ans[i];
 	}
 	for (int i = 0; i < _players.size(); i++)
 	{

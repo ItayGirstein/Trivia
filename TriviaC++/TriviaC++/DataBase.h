@@ -22,12 +22,9 @@ public:
 
 
 private:
-<<<<<<< HEAD
 	int callbackGeneral(void* notUsed, int argc, char** argv, char** azCol);
-=======
-	void rcCheck(int rc, sqlite3* db);
+	bool rcCheck(int rc, sqlite3* db);
 	static int callbackCount(void* notUsed, int argc, char** argv, char** azCol);
->>>>>>> 7f7a295c7f887a669488086263f8ada64aed6742
 	static int callbackQuestions(void* notUsed, int argc, char** argv, char** azCol);
 	//static int callbackBestScore(void* notUsed, int argc, char** argv, char** azCol);
 	//static int callbackPersonalStatus(void* notUsed, int argc, char** argv, char** azCol);

@@ -41,7 +41,7 @@ bool DataBase::addNewUser(string username, string password, string email)
 
 	string command = "insert into t_users(username, password, email) values(" + username + ", " + password + ", " + email + ");";
 	_rc = sqlite3_exec(_db, command.c_str(), this->callbackGeneral, nullptr, &zErrMsg);
-	rcCheck(_rc, _db);
+	return rcCheck(_rc, _db);
 }
 
 bool DataBase::isUserAndPassMatch(string user, string pass)
@@ -71,6 +71,7 @@ vector<Question*> DataBase::initQuestions(int questionsNo)
 
 		questionsNo--;
 	}
+	return toReturn;
 }
 
 vector<string> DataBase::getBestScores()
@@ -100,9 +101,7 @@ bool DataBase::addAnswerToPlayer(int, string, int, string, bool, int)
 
 int DataBase::callbackGeneral(void* notUsed, int argc, char** argv, char** azCol)
 {
-	int i;
-
-	for (i = 0; i < argc; i++)
+	for (int i = 0; i < argc; i++)
 	{
 		auto it = _results.find(azCol[i]);
 		if (it != _results.end())
@@ -117,7 +116,6 @@ int DataBase::callbackGeneral(void* notUsed, int argc, char** argv, char** azCol
 			_results.insert(p);
 		}
 	}
-
 	return 0;
 }
 
@@ -131,11 +129,13 @@ check if rc is valid
 input: rc and the database
 output: none
 */
-void rcCheck(int rc, sqlite3* db)
+bool DataBase::rcCheck(int rc, sqlite3* db)
 {
 	if (rc)
 	{
 		std::cout << sqlite3_errmsg(db) << std::endl;
 		sqlite3_close(db);
+		return true;
 	}
+	return false;
 }
