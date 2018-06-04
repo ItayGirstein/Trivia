@@ -45,6 +45,11 @@ string Room::getName()
 	return _name;
 }
 
+int Room::getQuestionTime()
+{
+	return _questionTime;
+}
+
 string Room::getUsersAsString(vector<User*> users, User* user)
 {
 	string toReturn = user->getUsername();

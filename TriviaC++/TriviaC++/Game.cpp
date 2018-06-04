@@ -35,7 +35,7 @@ void Game::handleFinishGame()
 {
 	_db.updateGameStatus(getId());
 	string msg("121" + std::to_string(_players.size()));
-	for (int i = 0; i <_players.size(); i++)
+	for (int i = 0; i < _players.size(); i++)
 	{
 		msg += "##" + _players[i]->getUsername() + std::to_string(_results[_players[i]->getUsername()]);
 	}
@@ -100,9 +100,16 @@ bool Game::handleAnswerFromUser(User* user, int answerNo, int time)
 	return handleNextTurn();
 }
 
-bool Game::leaveGame(User *)
+bool Game::leaveGame(User* CurrUser)
 {
-	return false;
+	for (int i = 0; i < _players.size(); i++)
+	{
+		if (_players[i] == CurrUser)
+		{
+			_players.erase(_players.begin() + i);
+		}
+	}
+	return handleNextTurn();
 }
 
 int Game::getId()
@@ -121,23 +128,16 @@ void Game::initQuestionsFromDB()
 
 void Game::sendQuestionToAllUsers()
 {
-	string msg("118###" + _questions[0]->getQuestion());
 	_currentTurnAnswers = 0;
-	string* ans = _questions[0]->getAnswers();
-	for (int i = 0; i < 4; i++)
-	{
-		msg += "###" + ans[i];
-	}
 	for (int i = 0; i < _players.size(); i++)
 	{
 		try
 		{
-			_players[i]->send(msg);
+			_players[i]->send(Protocol::sendQuestionMsg(_questions[_currQuestionIndex]));
 		}
 		catch (std::exception& e)
 		{
 			std::cout << e.what() << std::endl;
 		}
 	}
-	_questions.erase(_questions.begin());
 }

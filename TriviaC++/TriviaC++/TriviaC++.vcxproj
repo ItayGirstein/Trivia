@@ -118,6 +118,7 @@
     <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="Protocol.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="RecievedMessage.cpp" />
     <ClCompile Include="Room.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="Protocol.h" />
     <ClInclude Include="Question.h" />
     <ClInclude Include="RecievedMessage.h" />
     <ClInclude Include="Room.h" />

@@ -1,5 +1,5 @@
 #pragma once
-#include "Helper.h"
+#include "Protocol.h"
 
 class User;
 
@@ -16,6 +16,7 @@ public:
 	int getQuestionsNo();
 	int getId();
 	string getName();
+	int getQuestionTime();
 
 private:
 	string getUsersAsString(vector<User*>, User*);

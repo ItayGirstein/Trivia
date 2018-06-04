@@ -1,5 +1,5 @@
 #pragma once
-#include "Helper.h"
+#include "Protocol.h"
 #include "User.h"
 #include "sqlite3.h"
 #include <unordered_map>
