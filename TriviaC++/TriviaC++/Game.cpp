@@ -34,16 +34,11 @@ void Game::sendFirstQuestion()
 void Game::handleFinishGame()
 {
 	_db.updateGameStatus(getId());
-	string msg("121" + std::to_string(_players.size()));
-	for (int i = 0; i < _players.size(); i++)
-	{
-		msg += "##" + _players[i]->getUsername() + std::to_string(_results[_players[i]->getUsername()]);
-	}
 	for (int i = 0; i < _players.size(); i++)
 	{
 		try
 		{
-			_players[i]->send(msg);
+			_players[i]->send(Protocol::endGameMsg(_results));
 			_players[i]->setGame(nullptr);
 		}
 		catch (std::exception& e)

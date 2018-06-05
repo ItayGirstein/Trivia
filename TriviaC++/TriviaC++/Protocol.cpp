@@ -7,8 +7,8 @@
 string Protocol::signInRequestMsg(string userName, string password)
 {
 	return to_string(msgCodes::SIGNIN_REQ) +
-				"##" + userName +
-				"##" + password;
+		"##" + userName +
+		"##" + password;
 }
 
 //201
@@ -21,9 +21,9 @@ string Protocol::signOutRequestMsg()
 string Protocol::signUpRequestMsg(string userName, string password, string email)
 {
 	return to_string(msgCodes::SIGNUP_REQ) +
-				"##" + userName +
-				"##" + password +
-				"##" + email;
+		"##" + userName +
+		"##" + password +
+		"##" + email;
 }
 
 //205
@@ -36,14 +36,14 @@ string Protocol::emptyRoomsListRequestMsg()
 string Protocol::userInRoomRequestMsg(int roomID)
 {
 	return to_string(msgCodes::USERS_IN_ROOM_REQ) +
-				"####" + to_string(roomID);
+		"####" + to_string(roomID);
 }
 
 //209
 string Protocol::joinRoomRequestMsg(int roomID)
 {
 	return to_string(msgCodes::JOIN_ROOM_REQ) +
-				"####" + to_string(roomID);
+		"####" + to_string(roomID);
 }
 
 //211
@@ -56,10 +56,10 @@ string Protocol::leaveRoomRequestMsg()
 string Protocol::creatRoomRequestMsg(Room roomToCreate)
 {
 	return to_string(msgCodes::CREATE_ROOM_REQ) +
-				"##" + roomToCreate.getName() +
-				"#" + to_string(roomToCreate.getUsers().size()) +
-				"##" + to_string(roomToCreate.getQuestionsNo()) +
-				"##" + to_string(roomToCreate.getQuestionTime());
+		"##" + roomToCreate.getName() +
+		"#" + to_string(roomToCreate.getUsers().size()) +
+		"##" + to_string(roomToCreate.getQuestionsNo()) +
+		"##" + to_string(roomToCreate.getQuestionTime());
 }
 
 //215
@@ -78,8 +78,8 @@ string Protocol::startGameRequestMsg()
 string Protocol::sendAnswerMsg(int ansIndex, int ansTimeSeconds)
 {
 	return to_string(msgCodes::SEND_ANSWER) +
-				"#" + to_string(ansIndex) +
-				"##" + to_string(ansTimeSeconds);
+		"#" + to_string(ansIndex) +
+		"##" + to_string(ansTimeSeconds);
 }
 
 //222
@@ -109,17 +109,17 @@ string Protocol::sendExit()
 //102
 string Protocol::signInResponseMsg(string status)
 {
-	if(status == "success")
+	if (status == "success")
 		return to_string(msgCodes::SIGNIN_RES) +
-					"#" + "0";
+		"#" + "0";
 
-	else if(status == "Wrong Details")
+	else if (status == "Wrong Details")
 		return to_string(msgCodes::SIGNIN_RES) +
-					"#" + "1";
+		"#" + "1";
 
-	else if(status == "User is already connected")
+	else if (status == "User is already connected")
 		return to_string(msgCodes::SIGNIN_RES) +
-					"#" + "2";
+		"#" + "2";
 
 	return to_string(msgCodes::UNKOWN_ERROR);
 }
@@ -153,31 +153,70 @@ string Protocol::signUpResponseMsg(string status)
 //106
 string Protocol::roomsListResponseMsg(map<int, Room> roomsList)
 {
-	return string();
+	string toReturn(to_string(msgCodes::ROOMS_LIST) + "####" + to_string(roomsList.size()));
+	map<int, Room>::iterator it = roomsList.begin();
+	while (it != roomsList.end())
+	{
+		toReturn += "####" + to_string(it->first) + "##" + it->second.getName();
+		it++;
+	}
+	return toReturn;
 }
 
 //108
 string Protocol::usersInRoomResponsetMsg(vector<User> usersList)
 {
-	return string();
+	string toReturn(to_string(msgCodes::USERS_IN_ROOM_RES) + to_string(usersList.size()));
+	if (usersList[0].getRoom())
+		for (int i = 0; i < usersList.size(); i++)
+		{
+			toReturn += "##" + usersList[i].getUsername();
+		}
+
+	else
+		toReturn += to_string(msgCodes::UNKOWN_ERROR);
+
+	return toReturn;
 }
 
 //110
 string Protocol::joinRoomResponseMsg(char status, int questionsNumber, int qusetionTime)
 {
-	return string();
+	if (status == '0')
+		return to_string(msgCodes::JOIN_ROOM_RES) +
+		"#" + "0" +
+		"##" + to_string(questionsNumber) +
+		"##" + to_string(qusetionTime);
+
+	else if (status == '1')
+		return to_string(msgCodes::JOIN_ROOM_RES) +
+		"#" + "1";
+
+	else if (status == '2')
+		return to_string(msgCodes::JOIN_ROOM_RES) +
+		"#" + "2";
+
+	return to_string(msgCodes::UNKOWN_ERROR);
 }
 
 //112
 string Protocol::leaveRoomResponseMsg()
 {
-	return string();
+	return to_string(msgCodes::LEAVE_ROOM_RES) + "0";
 }
 
 //114
 string Protocol::creatRoomResponseMsg(string status)
 {
-	return string();
+	if (status == "success")
+		return to_string(msgCodes::CREATE_ROOM_RES) +
+		"#" + "0";
+
+	else if (status == "fail")
+		return to_string(msgCodes::CREATE_ROOM_RES) +
+		"#" + "1";
+
+	return to_string(msgCodes::UNKOWN_ERROR);
 }
 
 //116
@@ -210,9 +249,16 @@ string Protocol::answerResponseMsg(bool ansStatus)
 }
 
 //121
-string Protocol::endGameMsg(std::map<string, int>)
+string Protocol::endGameMsg(map<string, int> results)
 {
-	return string();
+	string msg("121" + to_string(results.size()));
+	map<string, int>::iterator it = results.begin();
+	while (it != results.end())
+	{
+		msg += "##" + it->first + "##" + to_string(it->second);
+		it++;
+	}
+	return msg;
 }
 
 //124

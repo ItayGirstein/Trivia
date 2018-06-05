@@ -73,7 +73,7 @@ public:																																										//Msg code:
 	static string closeRoomResponseMsg();																																//116
 	static string sendQuestionMsg(Question* q);																														//118
 	static string answerResponseMsg(bool ansStatus);																												//120
-	static string endGameMsg(std::map<string, int>);																												//121
+	static string endGameMsg(map<string, int> results);																												//121
 	static string bestScoreResponseMsg(vector<std::pair<string, int>> bestScoreList);															//124
 	static string personalStatusResponseMsg(int numberOfGames, int rightAnsC, int wrongAnsC, double avgAnsTime);    //126
 };
