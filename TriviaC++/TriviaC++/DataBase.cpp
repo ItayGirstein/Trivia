@@ -1,6 +1,7 @@
 #include "DataBase.h"
 
-std::unordered_map<string, vector<string>> _results;
+string results;
+vector<string> resultsVecor;
 
 DataBase::DataBase()
 {
@@ -19,14 +20,13 @@ bool DataBase::isUserExists(string username)
 	char *zErrMsg = 0;
 
 	string command = "select email from t_users where username = " + username + ";"; // the email used for testing.
+	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 	rcCheck(_rc, _db);
 
-	auto it = _results.begin();
-
-	if (_results.size() != 0)
+	if (results.size() != 0)
 	{
-		if (it->second[0] == "")
+		if (resultsVecor[0] == "")
 		{
 			return false;
 		}
@@ -40,6 +40,7 @@ bool DataBase::addNewUser(string username, string password, string email)
 	char *zErrMsg = 0;
 
 	string command = "insert into t_users(username, password, email) values(" + username + ", " + password + ", " + email + ");";
+	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 	return rcCheck(_rc, _db);
 }
@@ -48,12 +49,13 @@ bool DataBase::isUserAndPassMatch(string user, string pass)
 {
 	string command = "select password from t_users where username = " + user + ";";
 	char *zErrMsg = 0;
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	auto it = _results.begin();
 
-	if (_results.size() != 0)
+	if (results.size() != 0)
 	{
-		if (it->second[0] == pass)
+		if (resultsVecor[0] == pass)
 		{
 			return true;
 		}
@@ -64,18 +66,44 @@ bool DataBase::isUserAndPassMatch(string user, string pass)
 
 vector<Question*> DataBase::initQuestions(int questionsNo)
 {
-	vector<Question*> toReturn;
-	while (questionsNo != 0)
-	{
-		
+	srand(time(NULL));
+	vector<Question*> toReturn = vector<Question*>();
+	vector<int> generatedValues = vector<int>();
+	string command = "select count() from questions;";
+	char *zErrMsg = 0;
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+	rcCheck(_rc, _db);
 
-		questionsNo--;
+	int range = std::stoi(resultsVecor[1]);
+	int num = 0;
+
+	if (questionsNo > range) {
+		std::cout << "Invalid Number of Questions." << std::endl;
+		return vector<Question*>();
 	}
+	for (int i = 0; i < questionsNo; i++) {
+
+		num = 1 + (rand() % (range));
+		while (std::find(generatedValues.begin(), generatedValues.end(), num) != generatedValues.end())
+		{
+			num = 1 + (rand() % (range));
+		}
+		generatedValues.push_back(num);
+
+		command = "select * from questions where question_id=" + std::to_string(num) + ";";
+		results = "";
+		_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+		toReturn.push_back(new Question(num, resultsVecor[2], resultsVecor[3], resultsVecor[4], resultsVecor[5], resultsVecor[6]));
+	}
+
 	return toReturn;
 }
-
+	
 vector<string> DataBase::getBestScores()
 {
+
 	return vector<string>();
 }
 
@@ -86,7 +114,17 @@ vector<string> DataBase::getPersonalStatus(string)
 
 int DataBase::insertNewGame()
 {
-	return 0;
+	char *zErrMsg = 0;
+
+	string command = "insert into t_games(status, start_game) values(0, timedate('now'));";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+	command = "select game_id from t_games order by game_id desc limit 1;";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+	return results[0];
 }
 
 bool DataBase::updateGameStatus(int)
@@ -101,21 +139,25 @@ bool DataBase::addAnswerToPlayer(int, string, int, string, bool, int)
 
 int DataBase::callbackGeneral(void* notUsed, int argc, char** argv, char** azCol)
 {
-	for (int i = 0; i < argc; i++)
-	{
-		auto it = _results.find(azCol[i]);
-		if (it != _results.end())
-		{
-			it->second.push_back(argv[i]);
-		}
-		else
-		{
-			std::pair<string, vector<string>> p;
-			p.first = azCol[i];
-			p.second.push_back(argv[i]);
-			_results.insert(p);
+	int i = 0;
+	results = "";
+
+	for (i = 0; i < argc; i++) {
+		if (argv[i]) {
+			results += "#";
+			results += argv[i];
 		}
 	}
+	resultsVecor.clear();
+	std::stringstream test;
+	std::string segment;
+
+	test.str(results);
+	while (std::getline(test, segment, '#'))
+	{
+		resultsVecor.push_back(segment);
+	}
+
 	return 0;
 }
 
