@@ -127,14 +127,33 @@ int DataBase::insertNewGame()
 	return results[0];
 }
 
-bool DataBase::updateGameStatus(int)
+bool DataBase::updateGameStatus(int gameId)
 {
-	return false;
+	char *zErrMsg = 0;
+
+	string command = "update status = 1, end_game = timedate('now') where game_id = " + std::to_string(gameId) + ";";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+	return rcCheck(_rc, _db);
 }
 
-bool DataBase::addAnswerToPlayer(int, string, int, string, bool, int)
+bool DataBase::addAnswerToPlayer(int gameId, string username, int questionId, string answer, bool isCorrect, int answerTime)
 {
-	return false;
+	char *zErrMsg = 0;
+
+	string command = "insert into t_players_answers(game_id, username, question_id, player_answer, is_correct, answer_time) values("+
+		std::to_string(gameId)+
+		","+username+
+		","+std::to_string(questionId)+
+		","+answer+
+		","+std::to_string(isCorrect)+
+		","+std::to_string(answerTime)+
+		");";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+	return rcCheck(_rc, _db);
 }
 
 int DataBase::callbackGeneral(void* notUsed, int argc, char** argv, char** azCol)
@@ -142,7 +161,7 @@ int DataBase::callbackGeneral(void* notUsed, int argc, char** argv, char** azCol
 	int i = 0;
 	results = "";
 
-	for (i = 0; i < argc; i++) {
+	for (i = 0; i != argc; i++) {
 		if (argv[i]) {
 			results += "#";
 			results += argv[i];
