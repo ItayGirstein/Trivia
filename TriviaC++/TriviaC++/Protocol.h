@@ -45,35 +45,35 @@ enum msgCodes
 // # == 1byte , ## == 2byte
 class Protocol
 {
-public:																																										//Msg code:
+public:																																		//Msg code:
 
-	static string signInRequestMsg(string userName, string password);																					//200
-	static string signOutRequestMsg();																																		//201
-	static string signUpRequestMsg(string userName, string password, string email);															//203
-	static string emptyRoomsListRequestMsg();																															//205
-	static string userInRoomRequestMsg(int roomID);																												//207
-	static string joinRoomRequestMsg(int roomID);																													//209
-	static string leaveRoomRequestMsg();																																	//211
-	static string creatRoomRequestMsg(Room roomToCreate);																									//213
-	static string closeRoomRequestMsg();																																	//215
-	static string startGameRequestMsg();																																	//217
-	static string sendAnswerMsg(int ansIndex, int ansTimeSeconds);																						//219
-	static string sendLeaveGame();																																				//222
-	static string bestScoreRequestMsg();																																	//223
-	static string personalStatusRequestMsg();																															//225
-	static string sendExit();																																							//299
-
-	static string signInResponseMsg(string status);																													//102
-	static string signUpResponseMsg(string status);																													//104
-	static string roomsListResponseMsg(map<int, Room> roomsList);																						//106
-	static string usersInRoomResponsetMsg(vector<User> usersList);																						//108
-	static string joinRoomResponseMsg(char status, int questionsNumber, int qusetionTime);												//110
-	static string leaveRoomResponseMsg();																																//112
-	static string creatRoomResponseMsg(string status);																											//114
-	static string closeRoomResponseMsg();																																//116
-	static string sendQuestionMsg(Question* q);																														//118
-	static string answerResponseMsg(bool ansStatus);																												//120
-	static string endGameMsg(map<string, int> results);																												//121
-	static string bestScoreResponseMsg(vector<std::pair<string, int>> bestScoreList);															//124
-	static string personalStatusResponseMsg(int numberOfGames, int rightAnsC, int wrongAnsC, double avgAnsTime);    //126
+	static string M200(string userName, string password);																		//200
+	static string M201();																																//201
+	static string M203(string userName, string password, string email);													//203
+	static string M205();																																//205
+	static string M207(int roomID);																												//207
+	static string M209(int roomID);																												//209
+	static string M211();																																//211
+	static string M213(Room roomToCreate);																								//213
+	static string M215();																																//215
+	static string M217();																																//217
+	static string M219(int ansIndex, int ansTimeSeconds);																		//219
+	static string M222();																																//222
+	static string M223();																																//223
+	static string M225();																																//225
+	static string M299();																																//299
+	
+	static string M102(string status);																											//102
+	static string M104(string status);																											//104
+	static string M106(map<int, Room> roomsList);																					//106
+	static string M108(vector<User*> usersList);																							//108
+	static string M110(char status, int questionsNumber, int qusetionTime);											//110
+	static string M112();																																//112
+	static string M114(string status);																											//114
+	static string M116();																																//116
+	static string M118(Question* q);																											//118
+	static string M120(bool ansStatus);																										//120
+	static string M121(map<string, int> results);																						//121
+	static string M124(vector<std::pair<string, int>> bestScoreList);														//124
+	static string M126(int numberOfGames, int rightAnsC, int wrongAnsC, double avgAnsTime);			//126
 };

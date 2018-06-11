@@ -6,13 +6,29 @@ Room::Room(int id, User * a, string n, int max, int time, int q) : _id(id), _adm
 	_users.push_back(a);
 }
 
-bool Room::joinRoom(User *)
+bool Room::joinRoom(User* user)
 {
-	return false;
+	if (_maxUsers == _users.size())
+	{
+		user->send(Protocol::M110('1', _questionsNo, _questionTime));
+		return false;
+	}
+	_users.push_back(user);
+	user->send(Protocol::M110('0',_questionsNo,_questionTime));
+	sendMessage(getUsersListMessage());
+	return true;
 }
 
-void Room::leaveRoom(User *)
+void Room::leaveRoom(User* user)
 {
+	for (int i = 0; i < _users.size(); i++)
+	{
+		if (_users[i] == user)
+		{
+			_users.erase(_users.begin() + i);
+			sendMessage(Protocol::M112());
+		}
+	}
 }
 
 int Room::closeRoom(User *)
@@ -27,7 +43,7 @@ vector<User*> Room::getUsers()
 
 string Room::getUsersListMessage()
 {
-	return string("1080");
+	return Protocol::M108(_users);
 }
 
 int Room::getQuestionsNo()

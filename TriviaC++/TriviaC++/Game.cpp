@@ -2,22 +2,24 @@
 #include "DataBase.h"
 #include "User.h"
 
-Game::Game(const vector<User*>& players, int flag, DataBase &db) : _players(players), _db(db)
+Game::Game(const vector<User*>& players, int questionsNo, DataBase &db) : _questions_no(questionsNo), _db(db)
 {
 	try
 	{
-		_db.insertNewGame();
+		_id = _db.insertNewGame();
+		_questions = _db.initQuestions(_questions_no);
+		_players = players;
+		for (int i = 0; i < _players.size(); i++)
+		{
+			_players[i]->setGame(this);
+			_results.insert(pair<string, int>(_players[i]->getUsername(), 0));
+		}
 	}
 	catch (std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
 	}
-	_db.initQuestions(0);
-	_results.clear();
-	for (int i = 0; i < _players.size(); i++)
-	{
-		_players[i]->setGame(this);
-	}
+	
 }
 
 Game::~Game()
@@ -38,7 +40,7 @@ void Game::handleFinishGame()
 	{
 		try
 		{
-			_players[i]->send(Protocol::endGameMsg(_results));
+			_players[i]->send(Protocol::M121(_results));
 			_players[i]->setGame(nullptr);
 		}
 		catch (std::exception& e)
@@ -51,7 +53,7 @@ void Game::handleFinishGame()
 bool Game::handleNextTurn()
 {
 	bool toReturn = true;
-	if (!_players.size())
+	if (_players.size() == 0)
 	{
 		handleFinishGame();
 		toReturn = false;
@@ -92,6 +94,7 @@ bool Game::handleAnswerFromUser(User* user, int answerNo, int time)
 	{
 		_db.addAnswerToPlayer(_id, user->getUsername(), _questions[_currQuestionIndex]->getId(), _questions[_currQuestionIndex]->getAnswers()[answerNo], isCorrect, time);
 	}
+	user->send(Protocol::M120(isCorrect));
 	return handleNextTurn();
 }
 
@@ -112,15 +115,6 @@ int Game::getId()
 	return _id;
 }
 
-bool Game::insertGameToDB()
-{
-	return false;
-}
-
-void Game::initQuestionsFromDB()
-{
-}
-
 void Game::sendQuestionToAllUsers()
 {
 	_currentTurnAnswers = 0;
@@ -128,7 +122,7 @@ void Game::sendQuestionToAllUsers()
 	{
 		try
 		{
-			_players[i]->send(Protocol::sendQuestionMsg(_questions[_currQuestionIndex]));
+			_players[i]->send(Protocol::M118(_questions[_currQuestionIndex]));
 		}
 		catch (std::exception& e)
 		{
