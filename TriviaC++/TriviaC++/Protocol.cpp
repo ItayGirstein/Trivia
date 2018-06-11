@@ -4,7 +4,7 @@
 #include "User.h"
 
 //200
-string Protocol::signInRequestMsg(string userName, string password)
+string Protocol::M200(string userName, string password)
 {
 	return to_string(msgCodes::SIGNIN_REQ) +
 		"##" + userName +
@@ -12,13 +12,13 @@ string Protocol::signInRequestMsg(string userName, string password)
 }
 
 //201
-string Protocol::signOutRequestMsg()
+string Protocol::M201()
 {
 	return to_string(msgCodes::SIGNOUT_REQ);
 }
 
 //203
-string Protocol::signUpRequestMsg(string userName, string password, string email)
+string Protocol::M203(string userName, string password, string email)
 {
 	return to_string(msgCodes::SIGNUP_REQ) +
 		"##" + userName +
@@ -27,33 +27,33 @@ string Protocol::signUpRequestMsg(string userName, string password, string email
 }
 
 //205
-string Protocol::emptyRoomsListRequestMsg()
+string Protocol::M205()
 {
 	return to_string(msgCodes::ROOMS_LIST_REQ);
 }
 
 //207
-string Protocol::userInRoomRequestMsg(int roomID)
+string Protocol::M207(int roomID)
 {
 	return to_string(msgCodes::USERS_IN_ROOM_REQ) +
 		"####" + to_string(roomID);
 }
 
 //209
-string Protocol::joinRoomRequestMsg(int roomID)
+string Protocol::M209(int roomID)
 {
 	return to_string(msgCodes::JOIN_ROOM_REQ) +
 		"####" + to_string(roomID);
 }
 
 //211
-string Protocol::leaveRoomRequestMsg()
+string Protocol::M211()
 {
 	return to_string(msgCodes::LEAVE_ROOM_REQ);
 }
 
 //213
-string Protocol::creatRoomRequestMsg(Room roomToCreate)
+string Protocol::M213(Room roomToCreate)
 {
 	return to_string(msgCodes::CREATE_ROOM_REQ) +
 		"##" + roomToCreate.getName() +
@@ -63,19 +63,19 @@ string Protocol::creatRoomRequestMsg(Room roomToCreate)
 }
 
 //215
-string Protocol::closeRoomRequestMsg()
+string Protocol::M215()
 {
 	return to_string(msgCodes::CLOSE_ROOM_REQ);
 }
 
 //217
-string Protocol::startGameRequestMsg()
+string Protocol::M217()
 {
 	return to_string(msgCodes::START_GAME_REQ);
 }
 
 //219
-string Protocol::sendAnswerMsg(int ansIndex, int ansTimeSeconds)
+string Protocol::M219(int ansIndex, int ansTimeSeconds)
 {
 	return to_string(msgCodes::SEND_ANSWER) +
 		"#" + to_string(ansIndex) +
@@ -83,31 +83,31 @@ string Protocol::sendAnswerMsg(int ansIndex, int ansTimeSeconds)
 }
 
 //222
-string Protocol::sendLeaveGame()
+string Protocol::M222()
 {
 	return to_string(msgCodes::LEAVE_GAME);
 }
 
 //223
-string Protocol::bestScoreRequestMsg()
+string Protocol::M223()
 {
 	return to_string(msgCodes::BEST_SCORE_REQ);
 }
 
 //225
-string Protocol::personalStatusRequestMsg()
+string Protocol::M225()
 {
 	return to_string(msgCodes::PERSONAL_STATUS_REQ);
 }
 
 //299
-string Protocol::sendExit()
+string Protocol::M299()
 {
 	return to_string(msgCodes::RAGE_QUIT);
 }
 
 //102
-string Protocol::signInResponseMsg(string status)
+string Protocol::M102(string status)
 {
 	if (status == "success")
 		return to_string(msgCodes::SIGNIN_RES) +
@@ -125,7 +125,7 @@ string Protocol::signInResponseMsg(string status)
 }
 
 //104
-string Protocol::signUpResponseMsg(string status)
+string Protocol::M104(string status)
 {
 	if (status == "success")
 		return to_string(msgCodes::SIGNUP_RES) +
@@ -151,7 +151,7 @@ string Protocol::signUpResponseMsg(string status)
 }
 
 //106
-string Protocol::roomsListResponseMsg(map<int, Room> roomsList)
+string Protocol::M106(map<int, Room> roomsList)
 {
 	string toReturn(to_string(msgCodes::ROOMS_LIST) + "####" + to_string(roomsList.size()));
 	map<int, Room>::iterator it = roomsList.begin();
@@ -164,13 +164,13 @@ string Protocol::roomsListResponseMsg(map<int, Room> roomsList)
 }
 
 //108
-string Protocol::usersInRoomResponsetMsg(vector<User> usersList)
+string Protocol::M108(vector<User*> usersList)
 {
 	string toReturn(to_string(msgCodes::USERS_IN_ROOM_RES) + to_string(usersList.size()));
-	if (usersList[0].getRoom())
+	if (usersList[0]->getRoom())
 		for (int i = 0; i < usersList.size(); i++)
 		{
-			toReturn += "##" + usersList[i].getUsername();
+			toReturn += "##" + usersList[i]->getUsername();
 		}
 
 	else
@@ -180,7 +180,7 @@ string Protocol::usersInRoomResponsetMsg(vector<User> usersList)
 }
 
 //110
-string Protocol::joinRoomResponseMsg(char status, int questionsNumber, int qusetionTime)
+string Protocol::M110(char status, int questionsNumber, int qusetionTime)
 {
 	if (status == '0')
 		return to_string(msgCodes::JOIN_ROOM_RES) +
@@ -200,13 +200,13 @@ string Protocol::joinRoomResponseMsg(char status, int questionsNumber, int quset
 }
 
 //112
-string Protocol::leaveRoomResponseMsg()
+string Protocol::M112()
 {
 	return to_string(msgCodes::LEAVE_ROOM_RES) + "0";
 }
 
 //114
-string Protocol::creatRoomResponseMsg(string status)
+string Protocol::M114(string status)
 {
 	if (status == "success")
 		return to_string(msgCodes::CREATE_ROOM_RES) +
@@ -220,13 +220,13 @@ string Protocol::creatRoomResponseMsg(string status)
 }
 
 //116
-string Protocol::closeRoomResponseMsg()
+string Protocol::M116()
 {
 	return to_string(msgCodes::CLOSE_ROOM_RES);
 }
 
 //118
-string Protocol::sendQuestionMsg(Question * q)
+string Protocol::M118(Question * q)
 {
 	string msg("118###" + q->getQuestion());
 	string* ans = q->getAnswers();
@@ -238,7 +238,7 @@ string Protocol::sendQuestionMsg(Question * q)
 }
 
 //120
-string Protocol::answerResponseMsg(bool ansStatus)
+string Protocol::M120(bool ansStatus)
 {
 	string msg("120#");
 	if (ansStatus)
@@ -249,7 +249,7 @@ string Protocol::answerResponseMsg(bool ansStatus)
 }
 
 //121
-string Protocol::endGameMsg(map<string, int> results)
+string Protocol::M121(map<string, int> results)
 {
 	string msg("121" + to_string(results.size()));
 	map<string, int>::iterator it = results.begin();
@@ -262,13 +262,13 @@ string Protocol::endGameMsg(map<string, int> results)
 }
 
 //124
-string Protocol::bestScoreResponseMsg(vector<std::pair<string, int>> bestScoreList)
+string Protocol::M124(vector<pair<string, int>> bestScoreList)
 {
 	return string();
 }
 
 //126
-string Protocol::personalStatusResponseMsg(int numberOfGames, int rightAnsC, int wrongAnsC, double avgAnsTime)
+string Protocol::M126(int numberOfGames, int rightAnsC, int wrongAnsC, double avgAnsTime)
 {
 	return string();
 }

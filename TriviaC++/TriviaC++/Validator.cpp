@@ -1,15 +1,5 @@
 #include "Validator.h"
 
-
-Validator::Validator()
-{
-}
-
-
-Validator::~Validator()
-{
-}
-
 bool Validator::isPasswordValid(string pass)
 {
 	if (pass.length() < 4)
@@ -36,7 +26,6 @@ bool Validator::isPasswordValid(string pass)
 	{
 		return false;
 	}
-
 
 	return true;
 }

@@ -19,8 +19,6 @@ public:
 	int getId();
 
 private:
-	bool insertGameToDB();
-	void initQuestionsFromDB();
 	void sendQuestionToAllUsers();
 
 	int _id;

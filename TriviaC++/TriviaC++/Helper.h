@@ -17,6 +17,7 @@ using std::vector;
 using std::string;
 using std::to_string;
 using std::map;
+using std::pair;
 
 class Helper
 {
