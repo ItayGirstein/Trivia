@@ -66,7 +66,7 @@ bool DataBase::isUserAndPassMatch(string user, string pass)
 
 vector<Question*> DataBase::initQuestions(int questionsNo)
 {
-	srand(time(NULL));
+	//srand(time(NULL)); // need to be written on Main().
 	vector<Question*> toReturn = vector<Question*>();
 	vector<int> generatedValues = vector<int>();
 	string command = "select count() from questions;";
@@ -103,12 +103,37 @@ vector<Question*> DataBase::initQuestions(int questionsNo)
 	
 vector<string> DataBase::getBestScores()
 {
+	char *zErrMsg = 0;
+	vector<string> toReturn;
 
-	return vector<string>();
+	string command = "select count(username) from t_players_answers order by asc;";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+	toReturn[0] = resultsVecor[1];
+
+	return toReturn;
 }
 
-vector<string> DataBase::getPersonalStatus(string)
+vector<string> DataBase::getPersonalStatus(string name)
 {
+	char *zErrMsg = 0;
+	vector<string> toReturn;
+
+	string command = "select count(game_id) from t_players_answers where username=\""+name+"\";";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+	
+	toReturn[0] = resultsVecor[0];
+
+	command = "select count(is_correct) from t_players_answers where username=\"" + name + "\";";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+	toReturn[1] = resultsVecor[0];
+
+	command = "select count(is_correct) from t_players_answers where username=\"" + name + "\" and is_correct=0;";
+
 	return vector<string>();
 }
 
@@ -124,7 +149,7 @@ int DataBase::insertNewGame()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	return results[0];
+	return stoi(resultsVecor[0]);
 }
 
 bool DataBase::updateGameStatus(int gameId)
