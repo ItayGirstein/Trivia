@@ -104,13 +104,28 @@ vector<Question*> DataBase::initQuestions(int questionsNo)
 vector<string> DataBase::getBestScores()
 {
 	char *zErrMsg = 0;
-	vector<string> toReturn;
+	vector<string> toReturn = vector<string>();
 
-	string command = "select count(username) from t_players_answers order by asc;";
+	//retive the best one
+	string command = "select username, from t_players_answers where is_correct = 1 group by username order by count(is_correct) desc limit 1;";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
 	toReturn[0] = resultsVecor[1];
+
+	//second best one
+	command = "select username, from t_players_answers where is_correct = 1 group by username order by count(is_correct) desc limit 1 offset 1;";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+	toReturn[1] = resultsVecor[1];
+
+	//third best
+	command = "select username, from t_players_answers where is_correct = 1 group by username order by count(is_correct) desc limit 1 offset 2;";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+	toReturn[2] = resultsVecor[1];
 
 	return toReturn;
 }
@@ -133,8 +148,18 @@ vector<string> DataBase::getPersonalStatus(string name)
 	toReturn[1] = resultsVecor[0];
 
 	command = "select count(is_correct) from t_players_answers where username=\"" + name + "\" and is_correct=0;";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	return vector<string>();
+	toReturn[2] = resultsVecor[0];
+
+	command = "select avg(answer_time) from t_players_answers where username = \"erez\";";
+	results = "";
+	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
+
+	toReturn[3] = resultsVecor[0];
+
+	return toReturn;
 }
 
 int DataBase::insertNewGame()
