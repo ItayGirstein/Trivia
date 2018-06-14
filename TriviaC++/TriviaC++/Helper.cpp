@@ -17,10 +17,10 @@ int Helper::getMessageTypeCode(SOCKET sc)
 
 // send data to socket
 // this is private function
-void Helper::sendData(SOCKET sc, std::string message) 
+void Helper::sendData(SOCKET sc, std::string message)
 {
 	const char* data = message.c_str();
-	
+
 	if (send(sc, data, message.size(), 0) == INVALID_SOCKET)
 	{
 		throw std::exception("Error while sending message to client");
@@ -29,14 +29,14 @@ void Helper::sendData(SOCKET sc, std::string message)
 
 int Helper::getIntPartFromSocket(SOCKET sc, int bytesNum)
 {
-	char* s= getPartFromSocket(sc, bytesNum, 0);
+	char* s = getPartFromSocket(sc, bytesNum, 0);
 	return atoi(s);
 }
 
 std::string Helper::getStringPartFromSocket(SOCKET sc, int bytesNum)
 {
 	char* s = getPartFromSocket(sc, bytesNum, 0);
-    std::string res(s);
+	std::string res(s);
 	return res;
 }
 
@@ -71,8 +71,8 @@ char* Helper::getPartFromSocket(SOCKET sc, int bytesNum, int flags)
 
 std::string Helper::getPaddedNumber(int num, int digits)
 {
-	std::ostringstream ostr; 
-	ostr <<  std::setw(digits) << std::setfill('0') << num;
+	std::ostringstream ostr;
+	ostr << std::setw(digits) << std::setfill('0') << num;
 	return ostr.str();
 
 }

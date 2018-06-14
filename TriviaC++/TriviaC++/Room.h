@@ -1,6 +1,8 @@
 #pragma once
 #include "Protocol.h"
 
+#define NOT_ADMIN -1
+
 class User;
 
 class Room

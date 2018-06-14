@@ -19,7 +19,6 @@ Game::Game(const vector<User*>& players, int questionsNo, DataBase &db) : _quest
 	{
 		std::cout << e.what() << std::endl;
 	}
-	
 }
 
 Game::~Game()

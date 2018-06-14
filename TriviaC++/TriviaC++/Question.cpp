@@ -4,7 +4,7 @@
 template<typename T, int N>
 T* end_of(T(&arr)[N])
 {
-		return arr + N;
+	return arr + N;
 }
 
 

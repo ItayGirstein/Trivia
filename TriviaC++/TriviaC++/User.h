@@ -2,6 +2,8 @@
 #include "Protocol.h"
 #include "Game.h"
 
+#define USER_NOT_IN_ROOM -1
+
 class Room;
 class Game;
 

@@ -10,30 +10,45 @@ bool Room::joinRoom(User* user)
 {
 	if (_maxUsers == _users.size())
 	{
-		user->send(Protocol::M110('1', _questionsNo, _questionTime));
+		user->send(Protocol::M110('1', _questionsNo, _questionTime));	//failure in joining room
 		return false;
 	}
 	_users.push_back(user);
-	user->send(Protocol::M110('0',_questionsNo,_questionTime));
-	sendMessage(getUsersListMessage());
+	user->send(Protocol::M110('0', _questionsNo, _questionTime));	//success in joining room
+	sendMessage(getUsersListMessage());	//online users msg
 	return true;
 }
 
 void Room::leaveRoom(User* user)
 {
-	for (int i = 0; i < _users.size(); i++)
+	bool found = false;
+	for (int i = 0; i < _users.size() && !found; i++)
 	{
 		if (_users[i] == user)
 		{
 			_users.erase(_users.begin() + i);
-			sendMessage(Protocol::M112());
+			sendMessage(user, Protocol::M112());	//success in leaving room
+			found = true;	//DONT KEEP GOING
 		}
 	}
+	sendMessage(getUsersListMessage());	//online users msg
 }
 
-int Room::closeRoom(User *)
+int Room::closeRoom(User* user)
 {
-	return 0;
+	if (user == _admin)
+	{
+		for (int i = 0; i < _users.size(); i++)
+		{
+			_users[i]->send(Protocol::M116());	//close room msg
+			if (_users[i] != user)
+			{
+				_users[i]->clearRoom();	//clearing room to everybody but admin
+			}
+		}
+		return _id;
+	}
+	return NOT_ADMIN;
 }
 
 vector<User*> Room::getUsers()
@@ -83,18 +98,18 @@ void Room::sendMessage(string msg)
 
 void Room::sendMessage(User* exUser, string msg)
 {
-	try
+	for (int i = 0; i < _users.size(); i++)
 	{
-		for (int i = 0; i < _users.size(); i++)
+		try
 		{
 			if (_users[i] != exUser)
 			{
 				_users[i]->send(msg);
 			}
 		}
-	}
-	catch (std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
+		catch (std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
+		}
 	}
 }

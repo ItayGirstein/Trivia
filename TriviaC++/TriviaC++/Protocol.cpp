@@ -202,7 +202,7 @@ string Protocol::M110(char status, int questionsNumber, int qusetionTime)
 //112
 string Protocol::M112()
 {
-	return to_string(msgCodes::LEAVE_ROOM_RES) + "0";
+	return to_string(msgCodes::LEAVE_ROOM_RES) + "#0";
 }
 
 //114
