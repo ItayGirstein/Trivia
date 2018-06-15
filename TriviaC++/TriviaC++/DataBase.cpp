@@ -9,7 +9,6 @@ DataBase::DataBase()
 	rcCheck(_rc, _db);
 }
 
-
 DataBase::~DataBase()
 {
 	sqlite3_close(_db);

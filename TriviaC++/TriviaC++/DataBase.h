@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Protocol.h"
 #include "User.h"
 #include "sqlite3.h"
@@ -24,7 +25,7 @@ public:
 private:
 	static int callbackGeneral(void* notUsed, int argc, char** argv, char** azCol);
 	bool rcCheck(int rc, sqlite3* db);
-	static int callbackCount(void* notUsed, int argc, char** argv, char** azCol);
+	//static int callbackCount(void* notUsed, int argc, char** argv, char** azCol);
 	static int callbackQuestions(void* notUsed, int argc, char** argv, char** azCol);
 	//static int callbackBestScore(void* notUsed, int argc, char** argv, char** azCol);
 	//static int callbackPersonalStatus(void* notUsed, int argc, char** argv, char** azCol);
