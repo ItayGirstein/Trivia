@@ -10,6 +10,9 @@
 #include <iomanip>
 #include <sstream>
 #include <unordered_map>
+#include <mutex>
+#include <queue>
+#include <thread>
 
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -18,6 +21,8 @@ using std::string;
 using std::to_string;
 using std::map;
 using std::pair;
+using std::mutex;
+using std::queue;
 
 class Helper
 {

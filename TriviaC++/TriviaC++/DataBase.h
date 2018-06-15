@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Protocol.h"
-#include "User.h"
 #include "sqlite3.h"
-#include <unordered_map>
+
+class User;
 
 class DataBase
 {
