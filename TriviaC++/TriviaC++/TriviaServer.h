@@ -1,9 +1,13 @@
 #pragma once
 
 #include "Protocol.h"
-
-class RecievedMessage;
-class Database;
+#include "Room.h"
+#include "Question.h"
+#include "User.h"
+#include "DataBase.h"
+#include "RecievedMessage.h"
+#include "Game.h"
+#include "Validator.h"
 
 class TriviaServer
 {

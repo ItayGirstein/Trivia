@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "DataBase.h"
 #include "User.h"
+#include "Question.h"
 
 Game::Game(const vector<User*>& players, int questionsNo, DataBase &db) : _questions_no(questionsNo), _db(db)
 {

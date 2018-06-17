@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Protocol.h"
-#include "Question.h"
 
 class User;
 class DataBase;
+class Question;
 
 class Game
 {

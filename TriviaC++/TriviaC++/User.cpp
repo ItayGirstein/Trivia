@@ -1,4 +1,5 @@
 #include "User.h"
+#include "Game.h"
 #include "Room.h"
 
 User::User(string username, SOCKET sock) : _currGame(nullptr), _currRoom(nullptr), _username(username), _sock(sock)

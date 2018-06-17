@@ -4,6 +4,7 @@
 #include "sqlite3.h"
 
 class User;
+class Question;
 
 class DataBase
 {

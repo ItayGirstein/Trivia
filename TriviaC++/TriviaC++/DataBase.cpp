@@ -1,5 +1,6 @@
 #include "DataBase.h"
 #include "User.h"
+#include "Question.h"
 
 string results;
 vector<string> resultsVecor;

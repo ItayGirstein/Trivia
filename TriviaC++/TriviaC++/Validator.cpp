@@ -49,3 +49,4 @@ bool Validator::isUsernameVaild(string username)
 
 	return true;
 }
+
