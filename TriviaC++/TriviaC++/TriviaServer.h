@@ -9,6 +9,8 @@
 #include "Game.h"
 #include "Validator.h"
 
+#define PORT 1226
+
 class TriviaServer
 {
 public:
@@ -58,4 +60,3 @@ private:
 	std::mutex _mtxRecievedMessages;
 	queue<RecievedMessage*> _queRcvMessages;
 };
-

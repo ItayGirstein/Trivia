@@ -151,13 +151,13 @@ string Protocol::M104(string status)
 }
 
 //106
-string Protocol::M106(map<int, Room> roomsList)
+string Protocol::M106(map<int, Room*> roomsList)
 {
 	string toReturn(to_string(msgCodes::ROOMS_LIST) + "####" + to_string(roomsList.size()));
-	map<int, Room>::iterator it = roomsList.begin();
+	map<int, Room*>::iterator it = roomsList.begin();
 	while (it != roomsList.end())
 	{
-		toReturn += "####" + to_string(it->first) + "##" + it->second.getName();
+		toReturn += "####" + to_string(it->first) + "##" + it->second->getName();
 		it++;
 	}
 	return toReturn;
@@ -262,13 +262,28 @@ string Protocol::M121(map<string, int> results)
 }
 
 //124
-string Protocol::M124(vector<pair<string, int>> bestScoreList)
+string Protocol::M124(vector<string> bestScoreList)
 {
-	return string();
+	string toReturn(to_string(msgCodes::BEST_SCORE_RES));
+	//1st = 0,1
+	//2nd = 2,3
+	//3rd = 4,5
+	toReturn += "##" + bestScoreList[0] +
+		"####" + bestScoreList[1] +
+		"##" + bestScoreList[2] +
+		"####" + bestScoreList[3] +
+		"##" + bestScoreList[4] +
+		"####" + bestScoreList[5];
+	return toReturn;
 }
 
 //126
-string Protocol::M126(int numberOfGames, int rightAnsC, int wrongAnsC, double avgAnsTime)
+string Protocol::M126(vector<string> personalStatus)
 {
-	return string();
+	string toReturn(to_string(msgCodes::PERSONAL_STATUS_RES));
+	toReturn += "####" + personalStatus[0] +
+		"####" + personalStatus[1] +
+		"####" + personalStatus[2] +
+		"####" + personalStatus[3];
+	return toReturn;
 }

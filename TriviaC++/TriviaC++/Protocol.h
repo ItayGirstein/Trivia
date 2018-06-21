@@ -65,7 +65,7 @@ public:																																		//Msg code:
 	
 	static string M102(string status);																											//102
 	static string M104(string status);																											//104
-	static string M106(map<int, Room> roomsList);																					//106
+	static string M106(map<int, Room*> roomsList);																					//106
 	static string M108(vector<User*> usersList);																							//108
 	static string M110(char status, int questionsNumber, int qusetionTime);											//110
 	static string M112();																																//112
@@ -74,6 +74,6 @@ public:																																		//Msg code:
 	static string M118(Question* q);																											//118
 	static string M120(bool ansStatus);																										//120
 	static string M121(map<string, int> results);																						//121
-	static string M124(vector<std::pair<string, int>> bestScoreList);														//124
-	static string M126(int numberOfGames, int rightAnsC, int wrongAnsC, double avgAnsTime);			//126
+	static string M124(vector<string> bestScoreList);														//124
+	static string M126(vector<string> personalStatus);			//126
 };

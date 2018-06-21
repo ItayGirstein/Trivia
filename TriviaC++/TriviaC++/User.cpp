@@ -58,7 +58,7 @@ bool User::joinRoom(Room* newRoom)
 {
 	if (_currRoom == nullptr)
 	{
-		newRoom->joinRoom(this);
+		return newRoom->joinRoom(this);
 	}
 	return false;
 }
