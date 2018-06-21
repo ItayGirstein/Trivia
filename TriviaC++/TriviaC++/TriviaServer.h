@@ -56,6 +56,6 @@ private:
 	DataBase _db;
 	map<int, Room*> _roomsLIst;
 	std::mutex _mtxRecievedMessages;
-	std::queue<RecievedMessage*> _queRcvMessages;
+	queue<RecievedMessage*> _queRcvMessages;
 };
 

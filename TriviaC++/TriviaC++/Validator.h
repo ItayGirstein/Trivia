@@ -4,7 +4,7 @@
 class Validator
 {
 public:
-	bool isPasswordValid(string pass);
-	bool isUsernameVaild(string username);
+	bool static isPasswordValid(string pass);
+	bool static isUsernameVaild(string username);
 };
 
