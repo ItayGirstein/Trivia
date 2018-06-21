@@ -71,6 +71,7 @@
     <Compile Include="SignUp.Designer.cs">
       <DependentUpon>SignUp.cs</DependentUpon>
     </Compile>
+    <Compile Include="sock.cs" />
     <EmbeddedResource Include="bestScores.resx">
       <DependentUpon>bestScores.cs</DependentUpon>
     </EmbeddedResource>
