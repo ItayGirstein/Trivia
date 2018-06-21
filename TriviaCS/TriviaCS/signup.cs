@@ -10,14 +10,54 @@ using System.Windows.Forms;
 
 namespace TriviaCS
 {
-    public partial class signup : Form
+    public partial class SignUp : Form
     {
-        public signup()
+        public SignUp()
         {
             InitializeComponent();
         }
 
+        private void SignUp_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void back_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ok_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mail_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pass_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void username_TextChanged(object sender, EventArgs e)
         {
 
         }
