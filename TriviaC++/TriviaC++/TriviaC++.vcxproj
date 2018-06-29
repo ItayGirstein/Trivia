@@ -118,6 +118,7 @@
     <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Protocol.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="RecievedMessage.cpp" />

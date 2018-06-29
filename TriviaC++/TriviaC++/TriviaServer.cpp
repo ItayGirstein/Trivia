@@ -1,8 +1,13 @@
 #include "TriviaServer.h"
 
-TriviaServer::TriviaServer()
+int TriviaServer::_roomIdSequence = 1;
+
+TriviaServer::TriviaServer():_db()
 {
-	_db = DataBase();
+	WSAData wsa_data = {};
+	if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
+		throw	std::exception("WSAStartup failed");
+
 	_socket = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (_socket == INVALID_SOCKET)
 		throw std::exception(__FUNCTION__ " - socket");
@@ -35,7 +40,7 @@ void TriviaServer::bindAndListen()
 	struct sockaddr_in sa = { 0 };
 	sa.sin_port = htons(PORT);
 	sa.sin_family = AF_INET;
-	sa.sin_addr.s_addr = IFACE;
+	sa.sin_addr.s_addr = INADDR_ANY;
 	if (::bind(_socket, (struct sockaddr*)&sa, sizeof(sa)) == SOCKET_ERROR)
 		throw std::exception(__FUNCTION__ " - bind");
 
@@ -45,11 +50,11 @@ void TriviaServer::bindAndListen()
 
 void TriviaServer::acceptClient()
 {
-	SOCKET client_socket = accept(_socket, NULL, NULL);
+	SOCKET client_socket = ::accept(_socket, NULL, NULL);
 	if (client_socket == INVALID_SOCKET)
 		throw std::exception(__FUNCTION__);
 
-	std::thread tr(&TriviaServer::clientHandler, _socket);
+	std::thread tr(&TriviaServer::clientHandler, this, client_socket);
 	tr.detach();
 }
 
@@ -101,10 +106,10 @@ User* TriviaServer::handleSignin(RecievedMessage* msg)
 	{
 		if (getUserByName(msg->getValues()[1]))
 		{
-			User newUser = User(msg->getValues()[1], msg->getSock());
-			_connectedUsers.insert(pair<SOCKET, User*>(msg->getSock(), &newUser));
-			newUser.send(Protocol::M102("success"));
-			return &newUser;
+			User* newUser = new User(msg->getValues()[1], msg->getSock());
+			_connectedUsers.insert(pair<SOCKET, User*>(msg->getSock(), newUser));
+			newUser->send(Protocol::M102("success"));
+			return newUser;
 		}
 		else
 		{
@@ -270,7 +275,7 @@ void TriviaServer::handleGetPersonalStatus(RecievedMessage* msg)
 {
 	msg->getUser()->send(Protocol::M126(_db.getPersonalStatus(msg->getUser()->getUsername())));
 }
-//todo
+
 void TriviaServer::handleRecievedMessages()
 {
 	while (true)
@@ -318,6 +323,7 @@ void TriviaServer::handleRecievedMessages()
 			case msgCodes::C215:
 				handleCloseRoom(rcv);
 				break;
+
 			case msgCodes::C217:
 				handleStartGame(rcv);
 				break;

@@ -8,9 +8,8 @@
 #include "RecievedMessage.h"
 #include "Game.h"
 #include "Validator.h"
-#include "WSAInitializer.h"
 
-#define PORT 1226
+#define PORT 8820
 #define IFACE 0
 
 class TriviaServer
