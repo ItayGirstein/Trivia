@@ -8,8 +8,10 @@
 #include "RecievedMessage.h"
 #include "Game.h"
 #include "Validator.h"
+#include "WSAInitializer.h"
 
 #define PORT 1226
+#define IFACE 0
 
 class TriviaServer
 {
@@ -21,7 +23,7 @@ public:
 
 private:
 	void bindAndListen();
-	void accept();
+	void acceptClient();
 	void clientHandler(SOCKET);
 	void safeDeleteUser(RecievedMessage*);
 

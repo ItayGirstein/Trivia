@@ -24,23 +24,61 @@ TriviaServer::~TriviaServer()
 void TriviaServer::serve()
 {
 	bindAndListen();
-	std::thread clienthandler(&TriviaServer::clientHandler, _socket);
 	while (true)
 	{
-		accept();
+		acceptClient();
 	}
 }
-//todo
+
 void TriviaServer::bindAndListen()
 {
+	struct sockaddr_in sa = { 0 };
+	sa.sin_port = htons(PORT);
+	sa.sin_family = AF_INET;
+	sa.sin_addr.s_addr = IFACE;
+	if (::bind(_socket, (struct sockaddr*)&sa, sizeof(sa)) == SOCKET_ERROR)
+		throw std::exception(__FUNCTION__ " - bind");
+
+	if (::listen(_socket, SOMAXCONN) == SOCKET_ERROR)
+		throw std::exception(__FUNCTION__ " - listen");
 }
-//todo
-void TriviaServer::accept()
+
+void TriviaServer::acceptClient()
 {
+	SOCKET client_socket = accept(_socket, NULL, NULL);
+	if (client_socket == INVALID_SOCKET)
+		throw std::exception(__FUNCTION__);
+
+	std::thread tr(&TriviaServer::clientHandler, _socket);
+	tr.detach();
 }
-//todo
-void TriviaServer::clientHandler(SOCKET)
+
+void TriviaServer::clientHandler(SOCKET client_socket)
 {
+	RecievedMessage* currRcvMsg = nullptr;
+	try
+	{
+		// get the first message code
+		int msgCode = Helper::getMessageTypeCode(client_socket);
+
+		while (msgCode != msgCodes::C299) //C299 == EXIT
+		{
+			currRcvMsg = buildRecievedMessage(client_socket, msgCode);
+			addRecievedMessage(currRcvMsg);
+
+			msgCode = Helper::getMessageTypeCode(client_socket);
+		}
+
+		currRcvMsg = buildRecievedMessage(client_socket, msgCodes::C299);
+		addRecievedMessage(currRcvMsg);
+
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "Exception was catch in function clientHandler. socket=" << client_socket << ", what=" << e.what() << std::endl;
+		currRcvMsg = buildRecievedMessage(client_socket, msgCodes::C299);
+		addRecievedMessage(currRcvMsg);
+	}
 }
 
 void TriviaServer::safeDeleteUser(RecievedMessage* msg)
@@ -127,28 +165,28 @@ void TriviaServer::handleSignout(RecievedMessage* msg)
 		}
 	}
 }
-//check if needed
+
 void TriviaServer::handleLeaveGame(RecievedMessage* msg)
 {
 	if (msg->getUser()->leaveGame())
 	{
-		msg->getUser()->getGame()->handleFinishGame();	//me
 		delete msg->getUser()->getGame();
+		msg->getUser()->leaveGame();
 	}
 }
 //todo
 void TriviaServer::handleStartGame(RecievedMessage* msg)
 {
 }
-//check if needed
+
 void TriviaServer::handlePlayerAnswer(RecievedMessage* msg)
 {
 	if (msg->getUser()->getGame() != nullptr)
 	{
 		if (!msg->getUser()->getGame()->handleAnswerFromUser(msg->getUser(), std::stoi(msg->getValues()[0]), std::stoi(msg->getValues()[1])))
 		{
-			msg->getUser()->getGame()->handleFinishGame();	//me
 			delete msg->getUser()->getGame();
+			msg->getUser()->leaveGame();
 		}
 	}
 }
@@ -235,11 +273,84 @@ void TriviaServer::handleGetPersonalStatus(RecievedMessage* msg)
 //todo
 void TriviaServer::handleRecievedMessages()
 {
+	while (true)
+	{
+		if (_queRcvMessages.size() > 0)
+		{
+			_mtxRecievedMessages.lock();
+			RecievedMessage* rcv = _queRcvMessages.front();
+			_queRcvMessages.pop();
+			_mtxRecievedMessages.unlock();
+			switch (rcv->getMessageCode())
+			{
+			case msgCodes::C200:
+				handleSignin(rcv);
+				break;
 
+			case msgCodes::C201:
+				handleSignout(rcv);
+				break;
+
+			case msgCodes::C203:
+				handleSignup(rcv);
+				break;
+
+			case msgCodes::C205:
+				handleGetRooms(rcv);
+				break;
+
+			case msgCodes::C207:
+				handleGetUsersInRoom(rcv);
+				break;
+
+			case msgCodes::C209:
+				handleJoinRoom(rcv);
+				break;
+
+			case msgCodes::C211:
+				handleLeaveRoom(rcv);
+				break;
+
+			case msgCodes::C213:
+				handleCreateRoom(rcv);
+				break;
+
+			case msgCodes::C215:
+				handleCloseRoom(rcv);
+				break;
+			case msgCodes::C217:
+				handleStartGame(rcv);
+				break;
+
+			case msgCodes::C219:
+				handlePlayerAnswer(rcv);
+				break;
+
+			case msgCodes::C222:
+				handleLeaveGame(rcv);
+				break;
+
+			case msgCodes::C223:
+				handleGetBestScores(rcv);
+				break;
+
+			case msgCodes::C225:
+				handleGetPersonalStatus(rcv);
+				break;
+
+			default:
+				break;
+			}
+			delete rcv;
+		}
+	}
 }
-//todo
+
 void TriviaServer::addRecievedMessage(RecievedMessage* msg)
 {
+	_mtxRecievedMessages.lock();
+	_queRcvMessages.push(msg);
+	_mtxRecievedMessages.unlock();
 }
 //todo
 RecievedMessage* TriviaServer::buildRecievedMessage(SOCKET client_socket, int msgCode)

@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <string>
-#include <WinSock2.h>
 #include <map>
 #include <algorithm>
 #include <exception>
@@ -13,6 +12,8 @@
 #include <mutex>
 #include <queue>
 #include <thread>
+#include <WinSock2.h>
+#include <Windows.h>
 
 #pragma comment (lib, "Ws2_32.lib")
 
