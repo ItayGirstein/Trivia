@@ -185,8 +185,8 @@ string Protocol::M110(char status, int questionsNumber, int qusetionTime)
 	if (status == '0')
 		return to_string(msgCodes::C110) +
 		"0" +
-		to_string(questionsNumber) +
-		to_string(qusetionTime);
+		to_stringProtocol(questionsNumber,2) +
+		to_stringProtocol(qusetionTime,2);
 
 	else if (status == '1')
 		return to_string(msgCodes::C110) +
@@ -268,7 +268,7 @@ string Protocol::M124(vector<string> bestScoreList)
 	//1st = 0,1
 	//2nd = 2,3
 	//3rd = 4,5
-	toReturn += to_string(bestScoreList[0].length()) + bestScoreList[0] +
+	toReturn += to_stringProtocol(bestScoreList[0].length(),2) + bestScoreList[0] +
 		to_stringProtocol(std::stoi(bestScoreList[1]),6) +
 		to_stringProtocol(bestScoreList[2].length(),2) + bestScoreList[2] +
 		to_stringProtocol(std::stoi(bestScoreList[3]), 6) +
@@ -281,10 +281,10 @@ string Protocol::M124(vector<string> bestScoreList)
 string Protocol::M126(vector<string> personalStatus)
 {
 	string toReturn(to_string(msgCodes::C126));
-	toReturn += personalStatus[0] +
-		personalStatus[1] +
-		personalStatus[2] +
-		personalStatus[3];
+	toReturn += to_stringProtocol(std::stoi(personalStatus[0]),4) +
+		to_stringProtocol(std::stoi(personalStatus[1]),6) +
+		to_stringProtocol(std::stoi(personalStatus[2]),6) +
+		to_stringProtocol(std::stoi(personalStatus[3]),4);
 	return toReturn;
 }
 

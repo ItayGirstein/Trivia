@@ -9,6 +9,7 @@ User::User(string username, SOCKET sock) : _currGame(nullptr), _currRoom(nullptr
 void User::send(string msg)
 {
 	Helper::sendData(_sock, msg);
+	std::cout << "sending to " << _sock << ": " << msg << std::endl;
 }
 
 string User::getUsername()
@@ -56,11 +57,16 @@ bool User::createRoom(int roomId, string roomName, int maxUsers, int questionsNo
 
 bool User::joinRoom(Room* newRoom)
 {
+	bool success = false;
 	if (_currRoom == nullptr)
 	{
-		return newRoom->joinRoom(this);
+		success = newRoom->joinRoom(this);
+		if (success)
+		{
+			_currRoom = newRoom;
+		}
 	}
-	return false;
+	return success;
 }
 
 void User::leaveRoom()

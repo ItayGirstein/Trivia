@@ -65,6 +65,7 @@ void TriviaServer::acceptClient()
 void TriviaServer::clientHandler(SOCKET client_socket)
 {
 	RecievedMessage* currRcvMsg = nullptr;
+
 	try
 	{
 		// get the first message code
@@ -87,6 +88,8 @@ void TriviaServer::clientHandler(SOCKET client_socket)
 	{
 		std::cout << "Exception was catch in function clientHandler. socket=" << client_socket << ", what=" << e.what() << std::endl;
 		currRcvMsg = buildRecievedMessage(client_socket, msgCodes::C299);
+		if (getUserBySocket(client_socket))
+			_connectedUsers.erase(client_socket);
 		addRecievedMessage(currRcvMsg);
 	}
 }
@@ -300,6 +303,7 @@ void TriviaServer::handleRecievedMessages()
 	{
 		if (_queRcvMessages.size() > 0)
 		{
+			bool unknown = false;
 			_mtxRecievedMessages.lock();
 			RecievedMessage* rcv = _queRcvMessages.front();
 			_queRcvMessages.pop();
@@ -363,7 +367,20 @@ void TriviaServer::handleRecievedMessages()
 				break;
 
 			default:
+				unknown = true;
 				break;
+			}
+			if (unknown)
+				std::cout << "************" << std::endl << "recived unknown message from " << rcv->getSock() << ": " << to_string(rcv->getMessageCode()) << std::endl << "************" << std::endl;
+			else
+			{
+				std::cout << "recived from " << rcv->getSock() << ": " << to_string(rcv->getMessageCode()) << " ";
+				for (int i = 0; i < rcv->getValues().size(); i++)
+				{
+					std::cout << rcv->getValues()[i] << " ";
+				}
+				std::cout << std::endl;
+				TRACE("------------");
 			}
 			delete rcv;
 		}
@@ -402,7 +419,7 @@ RecievedMessage* TriviaServer::buildRecievedMessage(SOCKET client_socket, int ms
 		break;
 
 	case msgCodes::C207: case msgCodes::C209:
-		values.push_back(Helper::getStringPartFromSocket(client_socket, Helper::getIntPartFromSocket(client_socket, 4)));
+		values.push_back(Helper::getStringPartFromSocket(client_socket, 4));
 		break;
 
 	case msgCodes::C213:
@@ -447,7 +464,6 @@ User * TriviaServer::getUserBySocket(SOCKET client_socket)
 
 Room * TriviaServer::getRoomById(int roomId)
 {
-	roomId -= 1;
 	if (_roomsLIst.find(roomId) != _roomsLIst.end())
 		return _roomsLIst[roomId];
 	return nullptr;

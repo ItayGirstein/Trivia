@@ -27,7 +27,7 @@ void Room::leaveRoom(User* user)
 		if (_users[i] == user)
 		{
 			_users.erase(_users.begin() + i);
-			sendMessage(user, Protocol::M112());	//success in leaving room
+			user->send(Protocol::M112());	//success in leaving room
 			found = true;	//DONT KEEP GOING
 		}
 	}
