@@ -41,7 +41,7 @@
             this.MyStatus = new System.Windows.Forms.Button();
             this.Quit = new System.Windows.Forms.Button();
             this.signOut = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
+            this.ErrorBox = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -172,21 +172,22 @@
             this.signOut.Visible = false;
             this.signOut.Click += new System.EventHandler(this.signOut_Click);
             // 
-            // label4
+            // ErrorBox
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(197, 72);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(0, 17);
-            this.label4.TabIndex = 13;
+            this.ErrorBox.AutoSize = true;
+            this.ErrorBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ErrorBox.ForeColor = System.Drawing.Color.Red;
+            this.ErrorBox.Location = new System.Drawing.Point(197, 72);
+            this.ErrorBox.Name = "ErrorBox";
+            this.ErrorBox.Size = new System.Drawing.Size(0, 17);
+            this.ErrorBox.TabIndex = 13;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(412, 327);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.ErrorBox);
             this.Controls.Add(this.signOut);
             this.Controls.Add(this.Quit);
             this.Controls.Add(this.BestScores);
@@ -223,7 +224,7 @@
         private System.Windows.Forms.Button MyStatus;
         private System.Windows.Forms.Button Quit;
         private System.Windows.Forms.Button signOut;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label ErrorBox;
     }
 }
 

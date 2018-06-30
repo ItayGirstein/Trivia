@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace TriviaCS
 {
     static class Program
     {
+        public static NetworkStream sock = null;
+        public static string _username = null;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

@@ -28,53 +28,54 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.AverageAnswerTime = new System.Windows.Forms.Label();
+            this.NumberofWrongAnswers = new System.Windows.Forms.Label();
+            this.NumberofCorrectAnswers = new System.Windows.Forms.Label();
+            this.NumberofGames = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.back = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label5
+            // AverageAnswerTime
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(61, 172);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(199, 22);
-            this.label5.TabIndex = 26;
-            this.label5.Text = "Avrage time for answer:";
+            this.AverageAnswerTime.AutoSize = true;
+            this.AverageAnswerTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AverageAnswerTime.Location = new System.Drawing.Point(61, 172);
+            this.AverageAnswerTime.Name = "AverageAnswerTime";
+            this.AverageAnswerTime.Size = new System.Drawing.Size(177, 22);
+            this.AverageAnswerTime.TabIndex = 26;
+            this.AverageAnswerTime.Text = "AverageAnswerTime";
+            this.AverageAnswerTime.Click += new System.EventHandler(this.label5_Click);
             // 
-            // label4
+            // NumberofWrongAnswers
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(61, 140);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(224, 22);
-            this.label4.TabIndex = 25;
-            this.label4.Text = "Number of wrong answers:";
+            this.NumberofWrongAnswers.AutoSize = true;
+            this.NumberofWrongAnswers.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NumberofWrongAnswers.Location = new System.Drawing.Point(61, 140);
+            this.NumberofWrongAnswers.Name = "NumberofWrongAnswers";
+            this.NumberofWrongAnswers.Size = new System.Drawing.Size(210, 22);
+            this.NumberofWrongAnswers.TabIndex = 25;
+            this.NumberofWrongAnswers.Text = "NumberofWrongAnswers";
             // 
-            // label3
+            // NumberofCorrectAnswers
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(61, 109);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(224, 22);
-            this.label3.TabIndex = 24;
-            this.label3.Text = "Numbers of right answers: ";
+            this.NumberofCorrectAnswers.AutoSize = true;
+            this.NumberofCorrectAnswers.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NumberofCorrectAnswers.Location = new System.Drawing.Point(61, 109);
+            this.NumberofCorrectAnswers.Name = "NumberofCorrectAnswers";
+            this.NumberofCorrectAnswers.Size = new System.Drawing.Size(216, 22);
+            this.NumberofCorrectAnswers.TabIndex = 24;
+            this.NumberofCorrectAnswers.Text = "NumberofCorrectAnswers";
             // 
-            // label2
+            // NumberofGames
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(61, 77);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(152, 22);
-            this.label2.TabIndex = 23;
-            this.label2.Text = "Number of game: ";
+            this.NumberofGames.AutoSize = true;
+            this.NumberofGames.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NumberofGames.Location = new System.Drawing.Point(61, 77);
+            this.NumberofGames.Name = "NumberofGames";
+            this.NumberofGames.Size = new System.Drawing.Size(145, 22);
+            this.NumberofGames.TabIndex = 23;
+            this.NumberofGames.Text = "NumberofGames";
             // 
             // label1
             // 
@@ -101,10 +102,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(365, 323);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.AverageAnswerTime);
+            this.Controls.Add(this.NumberofWrongAnswers);
+            this.Controls.Add(this.NumberofCorrectAnswers);
+            this.Controls.Add(this.NumberofGames);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.back);
             this.Name = "myStatus";
@@ -116,10 +117,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label AverageAnswerTime;
+        private System.Windows.Forms.Label NumberofWrongAnswers;
+        private System.Windows.Forms.Label NumberofCorrectAnswers;
+        private System.Windows.Forms.Label NumberofGames;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button back;
     }

@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net;
+using System.Net.Sockets;
+
 
 namespace TriviaCS
 {
@@ -15,6 +18,11 @@ namespace TriviaCS
         public Form1()
         {
             InitializeComponent();
+            TcpClient client = new TcpClient();
+            IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8820);
+            client.Connect(serverEndPoint);
+
+            Program.sock = client.GetStream();
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -29,33 +37,73 @@ namespace TriviaCS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            label4.Text = "user";
+            string _username, _password;
 
-            label2.Visible = false;
-            label2.Enabled = false;
-            label3.Visible = false;
-            label3.Enabled = false;
-            username.Visible = false;
-            username.Enabled = false;
-            password.Visible = false;
-            password.Enabled = false;
-            SignUp.Visible = false;
-            SignUp.Enabled = false;
+            _username = username.Text;
+            _password = password.Text;
 
-            signOut.Visible = true;
-            signOut.Enabled = true;
+            string msg = ClientCodes.SignIn + _username.Length.ToString().PadLeft(2, '0') + _username +
+                _password.Length.ToString().PadLeft(2, '0') + _password;
 
-            SignIn.Visible = false;
-            SignIn.Enabled = false;
+            byte[] buffer = new ASCIIEncoding().GetBytes(msg);
+            Program.sock.Write(buffer, 0, msg.Length);
+            byte[] buffer2 = new byte[4096];
+            int bytesRead = Program.sock.Read(buffer2, 0, 4096);
 
-            JoinRoom.Enabled = true;
-            CreateRoom.Enabled = true;
-            MyStatus.Enabled = true;
-            BestScores.Enabled = true;
+            string input = new ASCIIEncoding().GetString(buffer2);
+            int codeNum = Int32.Parse(input);
+
+            switch (codeNum)
+            {
+                case ServerCodes.SignInSuccess: // did it
+                    Program._username = _username;
+
+                    ErrorBox.Text = _username;
+                    ErrorBox.ForeColor = Color.Black;
+
+                    label2.Visible = false;
+                    label2.Enabled = false;
+                    label3.Visible = false;
+                    label3.Enabled = false;
+                    username.Visible = false;
+                    username.Enabled = false;
+                    password.Visible = false;
+                    password.Enabled = false;
+                    SignUp.Visible = false;
+                    SignUp.Enabled = false;
+
+                    signOut.Visible = true;
+                    signOut.Enabled = true;
+
+                    SignIn.Visible = false;
+                    SignIn.Enabled = false;
+
+                    JoinRoom.Enabled = true;
+                    CreateRoom.Enabled = true;
+                    MyStatus.Enabled = true;
+                    BestScores.Enabled = true;
+                    break;
+
+                case ServerCodes.SignInWrong: // WD
+                    ErrorBox.Text = "Wrong detail.";
+                    break;
+
+                case 1022:
+                    ErrorBox.Text = "user is already connected.";
+                    break;
+
+                default:
+                    break;
+
+            }
+            
         }
 
         private void Quit_Click(object sender, EventArgs e)
         {
+            string msg = "299";
+            byte[] buffer = new ASCIIEncoding().GetBytes(msg);
+            Program.sock.Write(buffer, 0, msg.Length);
             this.Close();
         }
 
@@ -72,7 +120,13 @@ namespace TriviaCS
 
         private void signOut_Click(object sender, EventArgs e)
         {
-            label4.Text = "";
+            string msg = "201";
+            byte[] buffer = new ASCIIEncoding().GetBytes(msg);
+            Program.sock.Write(buffer, 0, msg.Length);
+
+            ErrorBox.Text = "";
+            ErrorBox.ForeColor = Color.Red;
+            Program._username = null;
 
             label2.Visible = true;
             label2.Enabled = true;
@@ -124,7 +178,7 @@ namespace TriviaCS
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            sock.sListener = 
+
         }
     }
 }

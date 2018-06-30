@@ -36,6 +36,7 @@
             this.password = new System.Windows.Forms.Label();
             this.email = new System.Windows.Forms.Label();
             this.back = new System.Windows.Forms.Button();
+            this.ErrorBox = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // username
@@ -115,11 +116,21 @@
             this.back.UseVisualStyleBackColor = true;
             this.back.Click += new System.EventHandler(this.back_Click);
             // 
+            // ErrorBox
+            // 
+            this.ErrorBox.AutoSize = true;
+            this.ErrorBox.ForeColor = System.Drawing.Color.Red;
+            this.ErrorBox.Location = new System.Drawing.Point(93, 13);
+            this.ErrorBox.Name = "ErrorBox";
+            this.ErrorBox.Size = new System.Drawing.Size(0, 13);
+            this.ErrorBox.TabIndex = 8;
+            // 
             // SignUp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(344, 248);
+            this.Controls.Add(this.ErrorBox);
             this.Controls.Add(this.back);
             this.Controls.Add(this.email);
             this.Controls.Add(this.password);
@@ -146,5 +157,6 @@
         private System.Windows.Forms.Label password;
         private System.Windows.Forms.Label email;
         private System.Windows.Forms.Button back;
+        private System.Windows.Forms.Label ErrorBox;
     }
 }
