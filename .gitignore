@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 TriviaC++/TriviaC++/TriviaC++.vcxproj
 TriviaC++/TriviaC++/TriviaC++.vcxproj.filters
+TriviaC++/TriviaC++/DataBase.cpp

@@ -3,7 +3,7 @@
 #include "User.h"
 #include "Question.h"
 
-Game::Game(const vector<User*>& players, int questionsNo, DataBase &db) : _questions_no(questionsNo), _db(db)
+Game::Game(const vector<User*>& players, int questionsNo, DataBase &db) : _questions_no(questionsNo), _db(db), _currentTurnAnswers(0)
 {
 	try
 	{
@@ -62,7 +62,7 @@ bool Game::handleNextTurn()
 	{
 		if (_players.size() == _currentTurnAnswers)
 		{
-			if (_currQuestionIndex == _questions_no)
+			if (_currQuestionIndex+1 == _questions_no)
 			{
 				handleFinishGame();
 				toReturn = false;
@@ -81,7 +81,7 @@ bool Game::handleAnswerFromUser(User* user, int answerNo, int time)
 {
 	bool isCorrect = false;
 	_currentTurnAnswers++;
-	if (_questions[_currQuestionIndex]->getCorrectAnswerIndex() == answerNo)	//user is right
+	if (_questions[_currQuestionIndex]->getCorrectAnswerIndex() == answerNo-1)	//user is right
 	{
 		_results[user->getUsername()]++;
 		isCorrect = true;

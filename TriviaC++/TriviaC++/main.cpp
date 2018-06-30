@@ -7,6 +7,7 @@
 
 int main()
 {
+	srand(time(NULL));
 	try
 	{
 		WSAInitializer wsa_init;

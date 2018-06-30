@@ -27,7 +27,7 @@ bool DataBase::isUserExists(string username)
 
 	if (results.size() != 0)
 	{
-		if (resultsVector[1] == "")
+		if (resultsVector[0] == "")
 		{
 			return true;
 		}
@@ -56,7 +56,7 @@ bool DataBase::isUserAndPassMatch(string user, string pass)
 
 	if (results.size() != 0)
 	{
-		if (resultsVector[1] == pass)
+		if (resultsVector[0] == pass)
 		{
 			return true;
 		}
@@ -69,34 +69,34 @@ vector<Question*> DataBase::initQuestions(int questionsNo)
 {
 	//srand(time(NULL)); // need to be written on Main().
 	vector<Question*> toReturn = vector<Question*>();
-	vector<int> generatedValues = vector<int>();
+	vector<int> generatedValues;
 	string command = "select count() from t_questions;";
 	char *zErrMsg = 0;
 	results = "";
+	resultsVector.clear();
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 	rcCheck(_rc, _db);
 
-	int range = std::stoi(resultsVector[1]);
+	int range = std::stoi(resultsVector[0]);
 	int num = 0;
 
 	if (questionsNo > range) {
 		std::cout << "Invalid Number of Questions." << std::endl;
 		return vector<Question*>();
 	}
-	for (int i = 0; i < questionsNo; i++) {
-
-		num = 1 + (rand() % (range));
-		while (std::find(generatedValues.begin(), generatedValues.end(), num) != generatedValues.end())
+	for (int i = 0; i < questionsNo; i++)
+	{
+		do
 		{
 			num = 1 + (rand() % (range));
-		}
+		} while (std::find(generatedValues.begin(), generatedValues.end(), num) != generatedValues.end());
 		generatedValues.push_back(num);
 
 		command = "select * from t_questions where question_id=\'" + std::to_string(num) + "\';";
 		results = "";
 		_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-		toReturn.push_back(new Question(num, resultsVector[2], resultsVector[3], resultsVector[4], resultsVector[5], resultsVector[6]));
+		toReturn.push_back(new Question(num, 0, resultsVector[1], resultsVector[2], resultsVector[3], resultsVector[4], resultsVector[5]));
 	}
 
 	return toReturn;
@@ -112,7 +112,7 @@ vector<string> DataBase::getBestScores()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	string username = resultsVector[1];
+	string username = resultsVector[0];
 	toReturn.push_back(username);
 
 	//retrive that user's score
@@ -120,14 +120,14 @@ vector<string> DataBase::getBestScores()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	toReturn.push_back(resultsVector[1]);
+	toReturn.push_back(resultsVector[0]);
 
 	//second best one
 	command = "select username from t_players_answers where is_correct = 1 group by username order by count(is_correct) desc limit 1 offset 1;";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	username = resultsVector[1];
+	username = resultsVector[0];
 	toReturn.push_back(username);
 
 	//retrive that user's score
@@ -135,14 +135,14 @@ vector<string> DataBase::getBestScores()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	toReturn.push_back(resultsVector[1]);
+	toReturn.push_back(resultsVector[0]);
 
 	//third best
 	command = "select username from t_players_answers where is_correct = 1 group by username order by count(is_correct) desc limit 1 offset 2;";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	username = resultsVector[1];
+	username = resultsVector[0];
 	toReturn.push_back(username);
 
 	//retrive that user's score
@@ -150,7 +150,7 @@ vector<string> DataBase::getBestScores()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	toReturn.push_back(resultsVector[1]);
+	toReturn.push_back(resultsVector[0]);
 
 	return toReturn;
 }
@@ -163,23 +163,23 @@ vector<string> DataBase::getPersonalStatus(string name)
 	string command = "select count(game_id) from t_players_answers where username=\"" + name + "\";";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
-	toReturn.push_back(resultsVector[1]);
+	toReturn.push_back(resultsVector[0]);
 
 	command = "select count(is_correct) from t_players_answers where username=\"" + name + "\";";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
-	toReturn.push_back(resultsVector[1]);
+	toReturn.push_back(resultsVector[0]);
 
 	command = "select count(is_correct) from t_players_answers where username=\"" + name + "\" and is_correct=0;";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
-	toReturn.push_back(resultsVector[1]);
+	toReturn.push_back(resultsVector[0]);
 
 	command = "select avg(answer_time) from t_players_answers where username = \"" + name + "\" ;";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 	if (resultsVector.size())
-		toReturn.push_back(resultsVector[1]);
+		toReturn.push_back(resultsVector[0]);
 	else
 		toReturn.push_back("0");
 
@@ -190,7 +190,7 @@ int DataBase::insertNewGame()
 {
 	char *zErrMsg = 0;
 
-	string command = "insert into t_games(status, start_game) values(0, timedate('now'));";
+	string command = "insert into t_games(status, start_time) values(0, DATETIME(\'now\'));";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
@@ -198,14 +198,14 @@ int DataBase::insertNewGame()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	return stoi(resultsVector[1]);
+	return stoi(resultsVector[0]);
 }
 
 bool DataBase::updateGameStatus(int gameId)
 {
 	char *zErrMsg = 0;
 
-	string command = "update status = 1, end_game = timedate('now') where game_id = \'" + std::to_string(gameId) + "\';";
+	string command = "update t_games set status = 1, end_time = DATETIME(\'now\') where game_id = \'" + std::to_string(gameId) + "\';";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
@@ -224,6 +224,7 @@ bool DataBase::addAnswerToPlayer(int gameId, string username, int questionId, st
 		"\',\'" + std::to_string(isCorrect) +
 		"\',\'" + std::to_string(answerTime) +
 		"\');";
+
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
@@ -246,10 +247,9 @@ int DataBase::callbackGeneral(void* notUsed, int argc, char** argv, char** azCol
 	std::string segment;
 
 	test.str(results);
-	//std::getline(test, segment, '#'); // remove the first empty line
+	std::getline(test, segment, '#'); // remove the first empty line
 	while (std::getline(test, segment, '#'))
 	{
-		std::cout << segment << std::endl;
 		resultsVector.push_back(segment);
 	}
 

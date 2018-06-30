@@ -5,7 +5,7 @@
 class Question
 {
 public:
-	Question(int cA, string q, string a, string b, string c, string d);
+	Question(int id ,int cA, string q, string a, string b, string c, string d);
 	~Question() = default;
 
 	string getQuestion();

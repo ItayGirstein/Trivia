@@ -192,8 +192,9 @@ void TriviaServer::handleStartGame(RecievedMessage* msg)
 {
 	try
 	{
-		msg->getUser()->setGame(new Game(msg->getUser()->getRoom()->getUsers(), msg->getUser()->getRoom()->getQuestionsNo(), _db));
-		_roomsLIst.erase(msg->getUser()->getRoom()->getId());
+		auto room = msg->getUser()->getRoom();
+		msg->getUser()->setGame(new Game(msg->getUser()->getRoom()->getUsers(), msg->getUser()->getRoom()->getQuestionsNo(),_db));
+		_roomsLIst.erase(room->getId());
 		msg->getUser()->getGame()->sendFirstQuestion();
 	}
 	catch (std::exception& e)
