@@ -18,11 +18,6 @@ namespace TriviaCS
         public Form1()
         {
             InitializeComponent();
-            TcpClient client = new TcpClient();
-            IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8820);
-            client.Connect(serverEndPoint);
-
-            Program.sock = client.GetStream();
         }
 
         private void label2_Click(object sender, EventArgs e)

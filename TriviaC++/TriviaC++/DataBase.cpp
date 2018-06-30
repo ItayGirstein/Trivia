@@ -27,7 +27,7 @@ bool DataBase::isUserExists(string username)
 
 	if (results.size() != 0)
 	{
-		if (resultsVector[0] == "")
+		if (resultsVector[1] == "")
 		{
 			return true;
 		}
@@ -56,7 +56,7 @@ bool DataBase::isUserAndPassMatch(string user, string pass)
 
 	if (results.size() != 0)
 	{
-		if (resultsVector[0] == pass)
+		if (resultsVector[1] == pass)
 		{
 			return true;
 		}
@@ -112,7 +112,7 @@ vector<string> DataBase::getBestScores()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	string username = resultsVector[0];
+	string username = resultsVector[1];
 	toReturn.push_back(username);
 
 	//retrive that user's score
@@ -120,14 +120,14 @@ vector<string> DataBase::getBestScores()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	toReturn.push_back(resultsVector[0]);
+	toReturn.push_back(resultsVector[1]);
 
 	//second best one
 	command = "select username from t_players_answers where is_correct = 1 group by username order by count(is_correct) desc limit 1 offset 1;";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	username = resultsVector[0];
+	username = resultsVector[1];
 	toReturn.push_back(username);
 
 	//retrive that user's score
@@ -135,14 +135,14 @@ vector<string> DataBase::getBestScores()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	toReturn.push_back(resultsVector[0]);
+	toReturn.push_back(resultsVector[1]);
 
 	//third best
 	command = "select username from t_players_answers where is_correct = 1 group by username order by count(is_correct) desc limit 1 offset 2;";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	username = resultsVector[0];
+	username = resultsVector[1];
 	toReturn.push_back(username);
 
 	//retrive that user's score
@@ -150,7 +150,7 @@ vector<string> DataBase::getBestScores()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	toReturn.push_back(resultsVector[0]);
+	toReturn.push_back(resultsVector[1]);
 
 	return toReturn;
 }
@@ -163,23 +163,23 @@ vector<string> DataBase::getPersonalStatus(string name)
 	string command = "select count(game_id) from t_players_answers where username=\"" + name + "\";";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
-	toReturn.push_back(resultsVector[0]);
+	toReturn.push_back(resultsVector[1]);
 
 	command = "select count(is_correct) from t_players_answers where username=\"" + name + "\";";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
-	toReturn.push_back(resultsVector[0]);
+	toReturn.push_back(resultsVector[1]);
 
 	command = "select count(is_correct) from t_players_answers where username=\"" + name + "\" and is_correct=0;";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
-	toReturn.push_back(resultsVector[0]);
+	toReturn.push_back(resultsVector[1]);
 
 	command = "select avg(answer_time) from t_players_answers where username = \"" + name + "\" ;";
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 	if (resultsVector.size())
-		toReturn.push_back(resultsVector[0]);
+		toReturn.push_back(resultsVector[1]);
 	else
 		toReturn.push_back("0");
 
@@ -198,7 +198,7 @@ int DataBase::insertNewGame()
 	results = "";
 	_rc = sqlite3_exec(_db, command.c_str(), callbackGeneral, nullptr, &zErrMsg);
 
-	return stoi(resultsVector[0]);
+	return stoi(resultsVector[1]);
 }
 
 bool DataBase::updateGameStatus(int gameId)
@@ -246,9 +246,10 @@ int DataBase::callbackGeneral(void* notUsed, int argc, char** argv, char** azCol
 	std::string segment;
 
 	test.str(results);
-	std::getline(test, segment, '#'); // remove the first empty line
+	//std::getline(test, segment, '#'); // remove the first empty line
 	while (std::getline(test, segment, '#'))
 	{
+		std::cout << segment << std::endl;
 		resultsVector.push_back(segment);
 	}
 

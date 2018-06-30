@@ -27,6 +27,8 @@ namespace TriviaCS
 
             string input = new ASCIIEncoding().GetString(buffer2);
 
+            Console.WriteLine(input);
+
             string temp = input.Replace("\0", String.Empty);
             int Length, i;
             temp = temp.Substring(3); // Skipping the Message code.
