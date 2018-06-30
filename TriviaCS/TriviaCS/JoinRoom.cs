@@ -12,6 +12,9 @@ namespace TriviaCS
 {
     public partial class JoinRoom : Form
     {
+        string[] values = new string[1024];
+        int maxRooms;
+
         public JoinRoom()
         {
             InitializeComponent();
@@ -28,12 +31,12 @@ namespace TriviaCS
             int RoomNameSize;
             temp = temp.Substring(3);
 
-            string[] values = new string[1024]; // max rooms
-
             values[0] = temp.Substring(0, 4); // Number of Rooms
             temp = temp.Substring(4);
 
-            for (int i = 1; i <= Convert.ToInt16(values[0]) * 2 && Convert.ToInt16(values[0]) != 0; i += 2)
+            maxRooms = Convert.ToInt16(values[0]);
+
+            for (int i = 1; i <= maxRooms * 2 && maxRooms != 0; i += 2)
             {
                 values[i] = temp.Substring(0, 4); // Id
                 temp = temp.Substring(4); 
@@ -41,20 +44,28 @@ namespace TriviaCS
                 RoomNameSize = Convert.ToInt16(temp.Substring(0, 2));
                 temp = temp.Substring(2); 
 
-                values[i + 1] = temp.Substring(0, RoomNameSize); //RoomName
+                values[i + 1] = temp.Substring(0, RoomNameSize); // Room name
                 temp = temp.Substring(RoomNameSize);
             }
 
             rooms.Items.Clear();
 
-            for (int i = 1; i <= Convert.ToInt16(values[0]) * 2 && Convert.ToInt16(values[0]) != 0; i += 2)
+            for (int i = 1; i <= maxRooms + 1 && maxRooms != 0; i += 2)
             {
                 rooms.Items.Add(values[i + 1]);
             }
+
+
+
         }
 
         private void rooms_SelectedIndexChanged(object sender, EventArgs e)
         {
+            joinButton.Enabled = true;
+            string msg = ClientCodes.AllRoomUsers + ((rooms.SelectedIndex * 2) - 1);
+
+            byte[] buffer = new ASCIIEncoding().GetBytes(msg);
+            Program.sock.Write(buffer, 0, msg.Length);
 
         }
 
