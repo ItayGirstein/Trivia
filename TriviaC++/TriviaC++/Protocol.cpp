@@ -111,15 +111,15 @@ string Protocol::M102(string status)
 {
 	if (status == "success")
 		return to_string(msgCodes::C102) +
-		"#" + "0";
+		"0";
 
 	else if (status == "Wrong Details")
 		return to_string(msgCodes::C102) +
-		"#" + "1";
+		"1";
 
 	else if (status == "User is already connected")
 		return to_string(msgCodes::C102) +
-		"#" + "2";
+		"2";
 
 	return to_string(msgCodes::UNKOWN_ERROR);
 }
@@ -129,23 +129,23 @@ string Protocol::M104(string status)
 {
 	if (status == "success")
 		return to_string(msgCodes::C104) +
-		"#" + "0";
+		"0";
 
 	else if (status == "Pass illegal")
 		return to_string(msgCodes::C104) +
-		"#" + "1";
+		"1";
 
 	else if (status == "Username is already exists")
 		return to_string(msgCodes::C104) +
-		"#" + "2";
+		"2";
 
 	else if (status == "Username is illegal")
 		return to_string(msgCodes::C104) +
-		"#" + "3";
+		"3";
 
 	else if (status == "Other")
 		return to_string(msgCodes::C104) +
-		"#" + "4";
+		"4";
 
 	return to_string(msgCodes::UNKOWN_ERROR);
 }
@@ -153,11 +153,11 @@ string Protocol::M104(string status)
 //106
 string Protocol::M106(map<int, Room*> roomsList)
 {
-	string toReturn(to_string(msgCodes::C106) + "####" + to_string(roomsList.size()));
+	string toReturn(to_string(msgCodes::C106) + to_stringProtocol(roomsList.size(),4));
 	map<int, Room*>::iterator it = roomsList.begin();
 	while (it != roomsList.end())
 	{
-		toReturn += "####" + to_string(it->first) + "##" + it->second->getName();
+		toReturn += to_stringProtocol(it->first,4) + to_stringProtocol(it->second->getName().length(),2) + it->second->getName();
 		it++;
 	}
 	return toReturn;
@@ -170,7 +170,7 @@ string Protocol::M108(vector<User*> usersList)
 	if (usersList[0]->getRoom())
 		for (int i = 0; i < usersList.size(); i++)
 		{
-			toReturn += "##" + usersList[i]->getUsername();
+			toReturn += to_stringProtocol(usersList[i]->getUsername().length(),2) + usersList[i]->getUsername();
 		}
 
 	else
@@ -184,17 +184,17 @@ string Protocol::M110(char status, int questionsNumber, int qusetionTime)
 {
 	if (status == '0')
 		return to_string(msgCodes::C110) +
-		"#" + "0" +
-		"##" + to_string(questionsNumber) +
-		"##" + to_string(qusetionTime);
+		"0" +
+		to_string(questionsNumber) +
+		to_string(qusetionTime);
 
 	else if (status == '1')
 		return to_string(msgCodes::C110) +
-		"#" + "1";
+		"1";
 
 	else if (status == '2')
 		return to_string(msgCodes::C110) +
-		"#" + "2";
+		"2";
 
 	return to_string(msgCodes::UNKOWN_ERROR);
 }
@@ -202,7 +202,7 @@ string Protocol::M110(char status, int questionsNumber, int qusetionTime)
 //112
 string Protocol::M112()
 {
-	return to_string(msgCodes::C112) + "#0";
+	return to_string(msgCodes::C112) + "0";
 }
 
 //114
@@ -210,11 +210,11 @@ string Protocol::M114(string status)
 {
 	if (status == "success")
 		return to_string(msgCodes::C114) +
-		"#" + "0";
+		"0";
 
 	else if (status == "fail")
 		return to_string(msgCodes::C114) +
-		"#" + "1";
+		"1";
 
 	return to_string(msgCodes::UNKOWN_ERROR);
 }
@@ -228,11 +228,11 @@ string Protocol::M116()
 //118
 string Protocol::M118(Question * q)
 {
-	string msg("118###" + q->getQuestion());
+	string msg("118"+ to_stringProtocol(q->getQuestion().length(),3) + q->getQuestion());
 	string* ans = q->getAnswers();
 	for (int i = 0; i < 4; i++)
 	{
-		msg += "###" + ans[i];
+		msg += to_stringProtocol(ans[i].length(),3) + ans[i];
 	}
 	return msg;
 }
@@ -240,7 +240,7 @@ string Protocol::M118(Question * q)
 //120
 string Protocol::M120(bool ansStatus)
 {
-	string msg("120#");
+	string msg("120");
 	if (ansStatus)
 	{
 		return msg += "1";
@@ -255,7 +255,7 @@ string Protocol::M121(map<string, int> results)
 	map<string, int>::iterator it = results.begin();
 	while (it != results.end())
 	{
-		msg += "##" + it->first + "##" + to_string(it->second);
+		msg += to_stringProtocol(it->first.length(),2) + it->first + to_stringProtocol(it->second,2);
 		it++;
 	}
 	return msg;
@@ -268,12 +268,12 @@ string Protocol::M124(vector<string> bestScoreList)
 	//1st = 0,1
 	//2nd = 2,3
 	//3rd = 4,5
-	toReturn += "##" + bestScoreList[0] +
-		"####" + bestScoreList[1] +
-		"##" + bestScoreList[2] +
-		"####" + bestScoreList[3] +
-		"##" + bestScoreList[4] +
-		"####" + bestScoreList[5];
+	toReturn += to_string(bestScoreList[0].length()) + bestScoreList[0] +
+		to_stringProtocol(std::stoi(bestScoreList[1]),6) +
+		to_stringProtocol(bestScoreList[2].length(),2) + bestScoreList[2] +
+		to_stringProtocol(std::stoi(bestScoreList[3]), 6) +
+		to_stringProtocol(bestScoreList[4].length(),2) + bestScoreList[4] +
+		to_stringProtocol(std::stoi(bestScoreList[5]), 6);
 	return toReturn;
 }
 
@@ -281,9 +281,20 @@ string Protocol::M124(vector<string> bestScoreList)
 string Protocol::M126(vector<string> personalStatus)
 {
 	string toReturn(to_string(msgCodes::C126));
-	toReturn += "####" + personalStatus[0] +
-		"####" + personalStatus[1] +
-		"####" + personalStatus[2] +
-		"####" + personalStatus[3];
+	toReturn += personalStatus[0] +
+		personalStatus[1] +
+		personalStatus[2] +
+		personalStatus[3];
+	return toReturn;
+}
+
+string Protocol::to_stringProtocol(int num, int bytesNum)
+{
+	string toReturn(to_string(num));
+	int size = bytesNum - toReturn.length();
+	for (int i = 0; i < size; i++)
+	{
+		toReturn = "0" + toReturn;
+	}
 	return toReturn;
 }

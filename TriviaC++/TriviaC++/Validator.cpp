@@ -12,17 +12,17 @@ bool Validator::isPasswordValid(string pass)
 		return false;
 	}
 
-	if (std::any_of(pass.begin(), pass.end(), ::isdigit))
+	if (!std::any_of(pass.begin(), pass.end(), ::isdigit))
 	{
 		return false;
 	}
 
-	if (std::any_of(pass.begin(), pass.end(), ::isupper))
+	if (!std::any_of(pass.begin(), pass.end(), ::isupper))
 	{
 		return false;
 	}
 
-	if (std::any_of(pass.begin(), pass.end(), ::islower))
+	if (!std::any_of(pass.begin(), pass.end(), ::islower))
 	{
 		return false;
 	}
@@ -42,7 +42,7 @@ bool Validator::isUsernameVaild(string username)
 		return false;
 	}
 
-	if (username.length() != 0)
+	if (username.length() == 0)
 	{
 		return false;
 	}

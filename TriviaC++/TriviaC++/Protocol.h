@@ -77,4 +77,7 @@ public:																																		//Msg code:
 	static string M121(map<string, int> results);																						//121
 	static string M124(vector<string> bestScoreList);																			//124
 	static string M126(vector<string> personalStatus);																			//126
+
+private:
+	static string to_stringProtocol(int,int);
 };
