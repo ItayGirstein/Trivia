@@ -36,7 +36,8 @@ namespace TriviaCS
         public const int SignInWrong = 1021;
         public const int SignInAlreadyConnected = 1022;
         public const int SignInFail = 1023;
-        #endregion // using Regions to make code more easier to read.
+        #endregion
+
         #region SignUp
         public const int SignUpSuccess = 1040;
         public const int SignUpPassIllegal = 1041;
@@ -44,17 +45,20 @@ namespace TriviaCS
         public const int SignUpUsernameIllegal = 1043;
         public const int SignUpOther = 1044;
         #endregion
+
         #region JoinRoom
         public const string JoinRoom = "110";
         public const string JoinRoomSuccess = "1100";
         public const string JoinRoomFull = "1101";
         public const string JoinRoomFail = "1102";
         #endregion
+
         #region CreateRoom
         public const string CreateRoom = "114";
         public const string CreateRoomSuccess = "1140";
         public const string CreateRoomFail = "1141";
         #endregion
+
         #region else
         public const string AllRooms = "106";
         public const string AllRoomUsers = "108";

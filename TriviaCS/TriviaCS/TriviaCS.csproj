@@ -61,6 +61,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="JoinRoom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JoinRoom.Designer.cs">
+      <DependentUpon>JoinRoom.cs</DependentUpon>
+    </Compile>
     <Compile Include="myStatus.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JoinRoom.resx">
+      <DependentUpon>JoinRoom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="myStatus.resx">
       <DependentUpon>myStatus.cs</DependentUpon>

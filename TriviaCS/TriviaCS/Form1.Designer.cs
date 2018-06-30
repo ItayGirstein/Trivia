@@ -127,6 +127,7 @@
             this.JoinRoom.TabIndex = 7;
             this.JoinRoom.Text = "Join Room";
             this.JoinRoom.UseVisualStyleBackColor = true;
+            this.JoinRoom.Click += new System.EventHandler(this.JoinRoom_Click);
             // 
             // BestScores
             // 

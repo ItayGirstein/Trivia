@@ -88,8 +88,12 @@ namespace TriviaCS
                     ErrorBox.Text = "Wrong detail.";
                     break;
 
-                case 1022:
+                case ServerCodes.SignInAlreadyConnected:
                     ErrorBox.Text = "user is already connected.";
+                    break;
+
+                case ServerCodes.SignInFail:
+                    ErrorBox.Text = "sign in failed";
                     break;
 
                 default:
@@ -101,9 +105,8 @@ namespace TriviaCS
 
         private void Quit_Click(object sender, EventArgs e)
         {
-            string msg = "299";
-            byte[] buffer = new ASCIIEncoding().GetBytes(msg);
-            Program.sock.Write(buffer, 0, msg.Length);
+            byte[] buffer = new ASCIIEncoding().GetBytes(ClientCodes.LeaveApp);
+            Program.sock.Write(buffer, 0, ClientCodes.LeaveApp.Length);
             this.Close();
         }
 
@@ -120,9 +123,8 @@ namespace TriviaCS
 
         private void signOut_Click(object sender, EventArgs e)
         {
-            string msg = "201";
-            byte[] buffer = new ASCIIEncoding().GetBytes(msg);
-            Program.sock.Write(buffer, 0, msg.Length);
+            byte[] buffer = new ASCIIEncoding().GetBytes(ClientCodes.SignOut);
+            Program.sock.Write(buffer, 0, ClientCodes.SignOut.Length);
 
             ErrorBox.Text = "";
             ErrorBox.ForeColor = Color.Red;
@@ -179,6 +181,17 @@ namespace TriviaCS
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void JoinRoom_Click(object sender, EventArgs e)
+        {
+            JoinRoom d = new JoinRoom();
+
+            this.Hide();
+
+            d.ShowDialog();
+
+            this.Show();
         }
     }
 }
