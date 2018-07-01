@@ -188,5 +188,16 @@ namespace TriviaCS
 
             this.Show();
         }
+
+        private void CreateRoom_Click(object sender, EventArgs e)
+        {
+            CreateRoom cr = new CreateRoom();
+            this.Hide();
+
+            cr.ShowDialog();
+
+            this.Show();
+
+        }
     }
 }

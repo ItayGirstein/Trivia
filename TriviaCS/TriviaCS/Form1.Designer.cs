@@ -117,6 +117,7 @@
             this.CreateRoom.TabIndex = 8;
             this.CreateRoom.Text = "Create Room";
             this.CreateRoom.UseVisualStyleBackColor = true;
+            this.CreateRoom.Click += new System.EventHandler(this.CreateRoom_Click);
             // 
             // JoinRoom
             // 
